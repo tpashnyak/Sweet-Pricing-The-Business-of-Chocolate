@@ -1,0 +1,1267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sweet Pricing</title>
+<meta name="description" content="AP Business with Personal Finance · Project 2, Task 5: Price and Pricing Strategies · A National Chocolate Day interactive lesson (45–50 minutes).">
+<style>
+:root{
+  --navy:#0F1B33; --navy-2:#18294A; --navy-3:#22375F;
+  --gold:#E8B84A; --gold-2:#F5D27A;
+  --cocoa:#5A3420; --cocoa-2:#7B4A2D; --milk:#C8915F;
+  --cream:#FBF6EC; --ink:#1B1B1F; --muted:#4A4F5C;
+  --good:#1E7A46; --bad:#B3261E; --info:#1F5FA8;
+  --radius:14px;
+  --serif:"Playfair Display", Georgia, "Times New Roman", serif;
+  --mono:"IBM Plex Mono", ui-monospace, Menlo, Consolas, monospace;
+  --sans:system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:70px;scroll-padding-bottom:110px}
+@media (prefers-reduced-motion: reduce){html{scroll-behavior:auto}*{animation:none!important;transition:none!important}}
+body{margin:0;font-family:var(--sans);color:var(--ink);background:var(--cream);line-height:1.6;font-size:17px}
+a{color:var(--info)}
+.skip{position:absolute;left:-999px;top:8px;background:var(--gold);color:var(--navy);padding:8px 14px;border-radius:8px;z-index:100;font-weight:700}
+.skip:focus{left:8px}
+:focus-visible{outline:3px solid var(--gold);outline-offset:3px}
+.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+
+header.hero{background:radial-gradient(circle at 80% 20%, var(--navy-3), var(--navy) 60%);color:#fff;padding:36px 16px 28px}
+.hero-inner{max-width:1100px;margin:0 auto;display:grid;grid-template-columns:1.3fr 1fr;gap:24px;align-items:center}
+@media (max-width:820px){.hero-inner{grid-template-columns:1fr}.hero svg{max-width:280px;margin:0 auto}}
+.kicker{font-family:var(--mono);color:var(--gold);letter-spacing:.1em;text-transform:uppercase;font-size:.78rem;margin:0}
+h1{font-family:var(--serif);font-size:clamp(2rem,5vw,3.3rem);line-height:1.1;margin:.3em 0}
+h1 span{color:var(--gold)}
+.hero p.lede{font-size:1.1rem;color:#E6E9F0;max-width:48ch}
+.badge-row{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+.badge{font-family:var(--mono);font-size:.78rem;border:1px solid var(--gold);color:var(--gold-2);padding:4px 10px;border-radius:999px}
+.hero-links{margin-top:14px;font-size:.9rem}
+.hero-links a{color:var(--gold-2)}
+
+nav.stations{position:sticky;top:0;z-index:50;background:var(--navy);border-bottom:3px solid var(--gold)}
+nav.stations ol{list-style:none;margin:0 auto;padding:8px 12px;display:flex;gap:6px;overflow-x:auto;max-width:1100px}
+nav.stations a{display:block;white-space:nowrap;color:#fff;text-decoration:none;font-size:.85rem;padding:6px 12px;border-radius:999px;border:1px solid transparent}
+nav.stations a:hover,nav.stations a:focus-visible{border-color:var(--gold);color:var(--gold-2)}
+nav.stations .min{font-family:var(--mono);color:var(--gold);font-size:.75rem;margin-left:4px}
+
+main{max-width:1100px;margin:0 auto;padding:10px 16px 120px}
+section.station{background:#fff;border-radius:var(--radius);box-shadow:0 2px 0 rgba(15,27,51,.08),0 10px 30px rgba(15,27,51,.06);padding:26px;margin:28px 0;border-top:6px solid var(--cocoa);scroll-margin-top:70px}
+@media (max-width:600px){section.station{padding:18px}}
+.station-head{display:flex;align-items:baseline;justify-content:space-between;gap:12px;flex-wrap:wrap}
+h2{font-family:var(--serif);color:var(--navy);font-size:1.9rem;margin:0}
+h3{font-family:var(--serif);color:var(--cocoa);margin:1.2em 0 .4em}
+.time-tag{font-family:var(--mono);background:var(--navy);color:var(--gold);padding:4px 10px;border-radius:8px;font-size:.85rem}
+.time-tag button{all:unset;cursor:pointer;margin-left:8px;text-decoration:underline}
+.time-tag button:focus-visible{outline:2px solid var(--gold)}
+.solo{background:#E7EFFA;border:2px solid var(--info);border-radius:12px;padding:10px 14px;margin:12px 0;font-size:.95rem}
+.solo strong{color:var(--info)}
+.goals{background:var(--navy);color:#fff;border-radius:var(--radius);padding:20px 24px;margin-top:24px}
+.goals p{margin:0 0 8px;font-weight:700;color:var(--gold-2)}
+.goals ul{margin:0;padding-left:22px}
+.start-card{background:#fff;border-radius:var(--radius);padding:18px 22px;margin-top:20px;border:2px solid #E5DCCB;display:grid;grid-template-columns:1fr 1fr;gap:12px 20px;align-items:end}
+@media (max-width:700px){.start-card{grid-template-columns:1fr}}
+
+.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+.grid-4{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+@media (max-width:980px){.grid-4{grid-template-columns:1fr 1fr}}
+@media (max-width:820px){.grid-3,.grid-2{grid-template-columns:1fr}}
+@media (max-width:560px){.grid-4{grid-template-columns:1fr}}
+
+.btn{font:inherit;font-weight:700;cursor:pointer;border-radius:10px;border:2px solid var(--navy);background:var(--navy);color:#fff;padding:10px 16px}
+.btn:hover{background:var(--navy-3)}
+.btn:disabled{opacity:.5;cursor:not-allowed}
+.btn.gold{background:var(--gold);color:var(--navy);border-color:var(--gold)}
+.btn.gold:hover{background:var(--gold-2)}
+.btn.ghost{background:#fff;color:var(--navy)}
+.btn.ghost:hover{background:#EEF1F7}
+.btn[aria-pressed="true"]{background:var(--cocoa);border-color:var(--cocoa);color:#fff}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-top:10px}
+
+.card{border:2px solid #E5DCCB;border-radius:var(--radius);padding:16px;background:var(--cream)}
+.feedback{margin-top:12px;padding:12px 14px;border-radius:10px;font-weight:600}
+.feedback:empty{display:none}
+.feedback.good{background:#E3F4EA;color:#145232;border-left:6px solid var(--good)}
+.feedback.bad{background:#FBE7E5;color:#8A1C16;border-left:6px solid var(--bad)}
+.feedback.info{background:#E7EFFA;color:#173F70;border-left:6px solid var(--info)}
+.callout{background:#FFF4D6;border-left:6px solid var(--gold);padding:12px 16px;border-radius:8px;margin:14px 0}
+.speech{position:relative;background:#fff;border:2px solid var(--navy);border-radius:16px;padding:12px 16px;font-weight:600;margin-bottom:14px}
+.speech::after{content:"";position:absolute;left:28px;bottom:-14px;border:12px solid transparent;border-top-color:var(--navy);border-bottom:0}
+
+.bar-choice{all:unset;box-sizing:border-box;cursor:pointer;display:block;border:3px solid #E5DCCB;border-radius:var(--radius);padding:14px;background:#fff;text-align:center;transition:transform .15s}
+.bar-choice:hover{transform:translateY(-3px)}
+.bar-choice:focus-visible{outline:3px solid var(--gold);outline-offset:3px}
+.bar-choice[aria-pressed="true"]{border-color:var(--cocoa);background:#FFF4E6}
+.bar-choice .price{font-family:var(--mono);font-size:1.3rem;color:var(--cocoa);font-weight:700}
+.flip button{all:unset;box-sizing:border-box;cursor:pointer;width:100%;min-height:150px;display:block;border-radius:var(--radius);padding:16px;background:var(--navy);color:#fff;text-align:center}
+.flip button:focus-visible{outline:3px solid var(--gold);outline-offset:3px}
+.flip button .q{font-family:var(--serif);font-size:1.15rem;color:var(--gold-2)}
+.flip button .hint{display:block;font-size:.8rem;margin-top:10px;color:#C9D1E3}
+.flip button[aria-expanded="true"]{background:var(--cocoa);border-radius:var(--radius) var(--radius) 0 0}
+.flip .ans{margin:0;background:#FFF4E6;border:2px solid var(--cocoa);border-top:0;border-radius:0 0 var(--radius) var(--radius);padding:12px 16px;font-weight:500}
+
+.strat-def{border-radius:12px;padding:12px 14px;color:#fff}
+.strat-def h3{margin:0 0 4px;font-family:var(--serif);font-size:1.1rem;color:var(--gold-2)}
+.strat-def p{margin:0;font-size:.93rem}
+.sort-card{background:#fff;border:2px solid #E5DCCB;border-radius:var(--radius);padding:14px;display:flex;flex-direction:column;gap:6px}
+.sort-card svg{width:100%;height:90px}
+.sort-card .price{font-family:var(--mono);font-weight:700;color:var(--cocoa)}
+.sort-card.right{border-color:var(--good);background:#F1FAF4}
+.sort-card.wrong{border-color:var(--bad);background:#FDF3F2}
+
+.power-wrap{display:grid;grid-template-columns:260px 1fr;gap:20px;align-items:start}
+@media (max-width:820px){.power-wrap{grid-template-columns:1fr}}
+.scenario-card{background:var(--navy);color:#fff;border-radius:var(--radius);padding:16px 18px}
+.scenario-card .num{font-family:var(--mono);color:var(--gold)}
+.scenario-card p{margin:.4em 0 0;font-size:1.08rem}
+
+fieldset{border:2px solid #E5DCCB;border-radius:var(--radius);padding:12px 16px;margin:0 0 14px}
+legend{font-family:var(--serif);font-weight:700;color:var(--navy);padding:0 6px;font-size:1.1rem}
+label{font-weight:600}
+input[type=text],select,textarea{font:inherit;width:100%;padding:8px 10px;border:2px solid #8C8270;border-radius:8px;background:#fff;margin:4px 0 10px;color:var(--ink)}
+textarea{min-height:80px;resize:vertical}
+input[type=range]{width:100%;accent-color:var(--cocoa)}
+.range-row{display:grid;grid-template-columns:1fr auto;gap:4px 12px;align-items:center;margin:8px 0}
+.range-row output{font-family:var(--mono);font-weight:700;color:var(--cocoa);min-width:70px;text-align:right}
+.range-row input{grid-column:1 / -1}
+.swatches{display:flex;gap:10px;flex-wrap:wrap}
+.swatches label{display:flex;align-items:center;gap:6px;font-weight:500;cursor:pointer}
+.swatches input,.radio-list input{accent-color:var(--cocoa);width:18px;height:18px}
+.radio-list{display:grid;gap:6px}
+.radio-list label{display:flex;gap:8px;align-items:flex-start;font-weight:500;cursor:pointer;padding:4px 6px;border-radius:8px}
+.radio-list label:hover{background:var(--cream)}
+.chip{display:inline-block;width:20px;height:20px;border-radius:50%;border:2px solid var(--ink)}
+.dash{background:var(--navy);color:#fff;border-radius:var(--radius);padding:18px}
+.dash h3{color:var(--gold-2);margin-top:0}
+.metric{display:flex;justify-content:space-between;border-bottom:1px dashed #3A4E78;padding:6px 0;gap:10px}
+.metric span:last-child{font-family:var(--mono);font-weight:700;color:var(--gold-2);text-align:right}
+.metric.big span:last-child{font-size:1.2rem}
+.profit-pos{color:#7CE3A4!important}
+.profit-neg{color:#FFB3AB!important}
+.meter{height:14px;background:#2B3F66;border-radius:99px;overflow:hidden;margin:8px 0 2px}
+.meter div{height:100%;background:var(--gold);width:0;transition:width .3s}
+.strat-check{background:#fff;color:var(--ink);border-radius:10px;padding:10px 12px;margin-top:12px;font-size:.95rem}
+.dash .feedback.info{background:#22375F;color:#fff;border-left-color:var(--gold)}
+
+.legal-item{border:2px solid #E5DCCB;border-radius:var(--radius);padding:12px 16px;margin:12px 0}
+.legal-item legend{font-family:var(--sans);font-size:1rem}
+.legal-item .opts{display:flex;flex-wrap:wrap;gap:8px}
+.legal-item .opts label{border:2px solid var(--navy);border-radius:999px;padding:4px 12px;font-weight:600;cursor:pointer;display:flex;align-items:center;gap:6px}
+.legal-item .opts input{accent-color:var(--cocoa)}
+
+.q-block{border:2px solid #E5DCCB;border-radius:var(--radius);padding:14px 16px;margin:14px 0}
+.q-block legend{font-size:1rem;font-family:var(--sans);font-weight:700}
+.q-opt{display:flex;gap:10px;align-items:flex-start;padding:6px 8px;border-radius:8px;cursor:pointer;font-weight:500}
+.q-opt:hover{background:var(--cream)}
+.q-opt input{margin-top:5px;accent-color:var(--cocoa);width:18px;height:18px}
+.q-opt.correct{background:#E3F4EA}
+.q-opt.wrong{background:#FBE7E5}
+.score{font-family:var(--serif);font-size:1.6rem;color:var(--navy)}
+.hyp{background:var(--cream);border:2px dashed var(--cocoa);border-radius:12px;padding:12px 16px;font-size:1.05rem}
+.hyp b{color:var(--cocoa)}
+#summaryBox{font-family:var(--mono);font-size:.85rem;min-height:260px;white-space:pre-wrap}
+
+.timer{position:fixed;right:16px;bottom:16px;z-index:60;background:var(--navy);color:#fff;border:2px solid var(--gold);border-radius:16px;padding:10px 12px;box-shadow:0 10px 30px rgba(0,0,0,.3);display:flex;align-items:center;gap:10px}
+.timer .clock{font-family:var(--mono);font-size:1.5rem;color:var(--gold-2);min-width:76px;text-align:center}
+.timer button{font:inherit;font-size:.8rem;cursor:pointer;background:transparent;color:#fff;border:1px solid #6B7FA8;border-radius:8px;padding:5px 8px}
+.timer button:hover{border-color:var(--gold)}
+.timer .label{font-size:.8rem;color:#C9D1E3;max-width:90px;line-height:1.2}
+.timer.done{animation:pulse 1s 3}
+.timer.min .label,.timer.min .clock,.timer.min #tStart,.timer.min #tReset{display:none}
+.timer.min{padding:6px}
+@keyframes pulse{50%{box-shadow:0 0 0 10px rgba(232,184,74,.5)}}
+@media (max-width:560px){.timer .label{display:none}}
+footer{text-align:center;color:var(--muted);font-size:.85rem;padding:20px}
+@keyframes bob{50%{transform:translateY(-6px)}}
+.bob{animation:bob 3s ease-in-out infinite}
+
+/* explainer videos */
+.vid-wrap{margin:14px 0;border:2px solid var(--navy);border-radius:var(--radius);background:#fff}
+.vid-wrap>summary{cursor:pointer;padding:10px 14px;font-weight:700;color:var(--navy);list-style-position:inside}
+.vid-wrap[open]>summary{border-bottom:2px solid var(--navy)}
+.player{padding:12px}
+.stage{position:relative;background:var(--cream);border-radius:12px;overflow:hidden;border:2px solid #E5DCCB}
+.scn{display:grid;grid-template-columns:1.05fr 1fr;gap:14px;align-items:center;padding:14px 16px 20px;min-height:220px}
+@media (max-width:640px){.scn{grid-template-columns:1fr}}
+.scn .art svg{width:100%;height:auto;max-height:230px;display:block}
+.scn .vh{font-family:var(--serif);font-size:1.45rem;color:var(--navy);margin:0 0 6px;font-weight:700}
+.scn .vsub{margin:0;font-size:1rem}
+.vbar{position:absolute;left:0;right:0;bottom:0;height:6px;background:#E5DCCB}
+.vbar div{height:100%;width:0;background:var(--gold)}
+.cap{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.vctl{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-top:10px}
+.vctl .btn{padding:6px 12px}
+.vcount{font-family:var(--mono);font-size:.85rem;color:var(--muted)}
+.vtrans{margin-top:8px}
+.vtrans summary{cursor:pointer;color:var(--info);font-weight:600}
+.vtrans ol{margin:6px 0 0;padding-left:22px;font-size:.95rem}
+@keyframes popIn{from{opacity:0;transform:scale(.6)}to{opacity:1;transform:none}}
+@keyframes growY{from{transform:scaleY(0)}to{transform:scaleY(1)}}
+@keyframes growX{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+@keyframes rocket{0%{transform:translateY(40px)}100%{transform:translateY(-10px)}}
+@keyframes swing{0%{transform:rotate(-60deg)}50%{transform:rotate(60deg)}100%{transform:rotate(10deg)}}
+@keyframes push{from{transform:translateX(0)}to{transform:translateX(30px);opacity:.35}}
+@keyframes draw{from{stroke-dashoffset:300}to{stroke-dashoffset:0}}
+.scn .pop{animation:popIn .5s both;transform-box:fill-box;transform-origin:center}
+.scn .grow{animation:growY .6s both;transform-box:fill-box;transform-origin:bottom}
+.scn .grow-x{animation:growX .7s both;transform-box:fill-box;transform-origin:left}
+.scn .rocket{animation:rocket 1.6s ease-out both}
+.scn .swing{animation:swing 2.4s ease-in-out both}
+.scn .push{animation:push 1.6s 1s ease-in both}
+.scn .draw{stroke-dasharray:300;animation:draw 1.6s both}
+/* AP practice */
+.verbs{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:10px;margin:8px 0}
+.verbs div{background:var(--cream);border:2px solid #E5DCCB;border-radius:12px;padding:10px 14px}
+.verbs dt{font-family:var(--serif);font-weight:700;color:var(--cocoa);font-size:1.1rem}
+.verbs dd{margin:2px 0 0}
+.src{font-size:.88rem;color:var(--muted)}
+.tv{background:#FFE7A8;color:#3E2414;font-weight:800;padding:0 4px;border-radius:4px;border-bottom:2px solid var(--cocoa)}
+.stimulus{background:var(--cream);border-left:6px solid var(--navy);border-radius:8px;padding:12px 16px;margin:10px 0}
+.stim-lead{font-weight:700;font-style:italic}
+table.fig{border-collapse:collapse;margin:10px 0;min-width:100%;background:#fff;font-size:.95rem}
+table.fig caption{font-weight:700;text-align:left;padding:4px 0;color:var(--navy)}
+table.fig th,table.fig td{border:1px solid #CFC5B3;padding:6px 10px;text-align:left}
+table.fig thead th{background:var(--navy);color:#fff}
+.tw{overflow-x:auto}
+.pts{font-family:var(--mono);font-size:.85rem;background:var(--navy);color:var(--gold);padding:2px 8px;border-radius:6px;vertical-align:middle}
+.respond{font-weight:700}
+.frq-part{border:2px solid #E5DCCB;border-radius:var(--radius);padding:12px 16px;margin:12px 0}
+.frq-q{display:block;font-weight:500}
+.frq-q b{font-family:var(--mono)}
+.sg{background:#F2F6FC;border-radius:10px;padding:8px 12px}
+.sg summary{cursor:pointer;font-weight:700;color:var(--info)}
+.sg ul{margin:4px 0 8px}
+.crit{margin:10px 0 2px}
+.pt-lbl{display:flex;gap:8px;align-items:center;background:#fff;border:2px solid var(--good);border-radius:8px;padding:6px 10px;margin:4px 0 8px;cursor:pointer}
+.pt-lbl input{width:18px;height:18px;accent-color:var(--good)}
+.noearn{font-size:.92rem;color:#5A1712}
+@media print{nav.stations,.timer,.no-print,.hero svg{display:none!important}section.station{box-shadow:none;break-inside:avoid}.dash{position:static}body{background:#fff}}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Skip to lesson</a>
+
+<header class="hero">
+  <div class="hero-inner">
+    <div>
+      <p class="kicker">AP Business with Personal Finance · Project 2: Marketing · Task 5: Price and Pricing Strategies</p>
+      <h1>Sweet <span>Pricing</span>: The Business of Chocolate</h1>
+      <p class="lede">It's National Chocolate Day! Discover why a candy bar costs $1.25 and a truffle box costs $40, what happens to prices when cocoa runs short, where the law draws the line — and then price your own bar without eating the profits.</p>
+      <div class="badge-row">
+        <span class="badge">45–50 minutes</span>
+        <span class="badge">Topic 2.5</span>
+        <span class="badge">LO 2.5.A · 2.5.B · 2.5.C</span>
+        <span class="badge">Works in class or on your own</span>
+      </div>
+      <p class="hero-links no-print">Teachers: <a href="lesson-plan.html">Printable lesson plan</a> · <a href="slides.html">Slide deck</a></p>
+    </div>
+    <svg class="bob" viewBox="0 0 300 260" role="img" aria-labelledby="cocoTitle">
+      <title id="cocoTitle">Cartoon of Coco, a smiling cacao pod mascot, waving next to a happy chocolate bar wearing a price tag</title>
+      <ellipse cx="150" cy="245" rx="110" ry="10" fill="#000" opacity=".25"/>
+      <g transform="translate(170 70) rotate(8)">
+        <rect x="0" y="0" width="100" height="150" rx="10" fill="#5A3420" stroke="#2E1A0F" stroke-width="4"/>
+        <g fill="#7B4A2D" stroke="#3E2414" stroke-width="2"><rect x="10" y="10" width="36" height="36" rx="4"/><rect x="54" y="10" width="36" height="36" rx="4"/><rect x="10" y="56" width="36" height="36" rx="4"/><rect x="54" y="56" width="36" height="36" rx="4"/></g>
+        <rect x="-4" y="96" width="108" height="58" rx="6" fill="#E8B84A" stroke="#2E1A0F" stroke-width="4"/>
+        <circle cx="34" cy="118" r="5" fill="#0F1B33"/><circle cx="66" cy="118" r="5" fill="#0F1B33"/>
+        <path d="M36 132 Q50 144 64 132" stroke="#0F1B33" stroke-width="4" fill="none" stroke-linecap="round"/>
+        <path d="M100 20 l30 -18" stroke="#2E1A0F" stroke-width="2"/>
+        <g transform="translate(118 -24) rotate(25)"><path d="M0 10 l12 -10 h40 v28 h-40z" fill="#fff" stroke="#2E1A0F" stroke-width="3"/><circle cx="10" cy="14" r="3" fill="#2E1A0F"/><text x="32" y="20" text-anchor="middle" font-family="monospace" font-weight="700" font-size="13" fill="#B3261E">$?</text></g>
+      </g>
+      <g transform="translate(40 40)">
+        <path d="M70 0 C120 10 140 80 120 140 C105 185 35 185 20 140 C0 80 20 10 70 0Z" fill="#C8915F" stroke="#5A3420" stroke-width="5"/>
+        <path d="M70 6 C62 60 62 120 70 176" stroke="#9C6A40" stroke-width="4" fill="none"/>
+        <path d="M45 15 C30 70 35 130 45 165" stroke="#9C6A40" stroke-width="3" fill="none"/>
+        <path d="M95 15 C110 70 105 130 95 165" stroke="#9C6A40" stroke-width="3" fill="none"/>
+        <ellipse cx="52" cy="78" rx="11" ry="13" fill="#fff"/><ellipse cx="90" cy="78" rx="11" ry="13" fill="#fff"/>
+        <circle cx="54" cy="81" r="6" fill="#0F1B33"/><circle cx="92" cy="81" r="6" fill="#0F1B33"/>
+        <path d="M52 108 Q71 128 90 108" stroke="#0F1B33" stroke-width="5" fill="#B3261E" stroke-linecap="round"/>
+        <circle cx="38" cy="100" r="7" fill="#E88A7A" opacity=".6"/><circle cx="104" cy="100" r="7" fill="#E88A7A" opacity=".6"/>
+        <path d="M6 110 C-14 90 -18 70 -8 58" stroke="#5A3420" stroke-width="7" fill="none" stroke-linecap="round"/>
+        <circle cx="-8" cy="54" r="9" fill="#C8915F" stroke="#5A3420" stroke-width="4"/>
+        <path d="M70 0 C72 -12 80 -20 92 -22" stroke="#1E7A46" stroke-width="5" fill="none" stroke-linecap="round"/>
+        <path d="M84 -18 C96 -34 116 -30 118 -26 C108 -14 96 -12 84 -18Z" fill="#2E9B5A"/>
+      </g>
+    </svg>
+  </div>
+</header>
+
+<nav class="stations" aria-label="Lesson stations">
+  <ol>
+    <li><a href="#warmup">1 · Warm Up<span class="min">5m</span></a></li>
+    <li><a href="#sort">2 · Strategy Sort<span class="min">7m</span></a></li>
+    <li><a href="#power">3 · Cocoa Crunch<span class="min">8m</span></a></li>
+    <li><a href="#lab">4 · Price Your Bar<span class="min">15m</span></a></li>
+    <li><a href="#legal">5 · Legal Line<span class="min">5m</span></a></li>
+    <li><a href="#exit">6 · Exit Ticket<span class="min">5m</span></a></li>
+    <li><a href="#ap">7 · AP Practice<span class="min">+25m</span></a></li>
+    <li><a href="#bcp">8 · Connect &amp; Turn In<span class="min">3m</span></a></li>
+  </ol>
+</nav>
+
+<main id="main">
+
+<div class="goals">
+  <p>By the end of this lesson, you will learn:</p>
+  <ul>
+    <li>how value-based, competitive, cost-based, and penetration pricing work, and when a business might choose each one;</li>
+    <li>how market conditions — such as supply-chain shortages, inflation, recession, competition, and price elasticity of demand — increase or limit a business's pricing power;</li>
+    <li>which legal constraints (laws against price fixing, price gouging, price discrimination and predatory pricing) limit how businesses set prices;</li>
+    <li>how to use AP task verbs to answer exam-style multiple-choice and free-response questions about pricing;</li>
+    <li>how to write a pricing strategy hypothesis for your Business Canvas Project.</li>
+  </ul>
+</div>
+
+<div class="start-card">
+  <div>
+    <label for="studentName">Your name</label>
+    <input type="text" id="studentName" data-save autocomplete="name" placeholder="First and last name">
+  </div>
+  <div class="solo" style="margin:0"><strong>Working on your own?</strong> No problem. Follow the blue "On your own" boxes in each station, type your answers in the boxes, and turn in your work summary at the end (Station 8). Stuck? Open the 🎬 short explainer video in that station. Your answers are saved in this browser as you go.</div>
+</div>
+
+<!-- 1 WARM UP -->
+<section class="station" id="warmup" aria-labelledby="h-warmup">
+  <div class="station-head">
+    <h2 id="h-warmup">Warm Up: Which Bar Wins Your Dollar?</h2>
+    <span class="time-tag">5 min <button type="button" data-timer="5" data-name="Warm Up">start timer</button></span>
+  </div>
+  <p>Three chocolate bars sit at the checkout. You can buy exactly one. Tap your pick.</p>
+  <div class="grid-3" role="group" aria-label="Choose a chocolate bar">
+    <button type="button" class="bar-choice" data-bar="0" aria-pressed="false">
+      <svg viewBox="0 0 160 110" width="100%" height="110" role="img" aria-label="Large bright red wrapper labeled Mega Bar">
+        <rect x="10" y="20" width="140" height="70" rx="10" fill="#C0392B" stroke="#2E1A0F" stroke-width="3"/>
+        <text x="80" y="62" text-anchor="middle" font-family="Georgia" font-size="22" font-weight="700" fill="#fff">MEGA BAR</text>
+        <circle cx="128" cy="32" r="16" fill="#E8B84A" stroke="#2E1A0F" stroke-width="2"/><text x="128" y="37" text-anchor="middle" font-size="11" font-weight="700" fill="#0F1B33">XL!</text>
+      </svg>
+      <strong>Mega Bar</strong><br><span class="price">$1.25</span><br><small>Big, sugary, sold everywhere</small>
+    </button>
+    <button type="button" class="bar-choice" data-bar="1" aria-pressed="false">
+      <svg viewBox="0 0 160 110" width="100%" height="110" role="img" aria-label="Slim kraft paper wrapper labeled Artisan 72 percent with a green leaf seal">
+        <rect x="35" y="18" width="90" height="74" rx="6" fill="#D9C3A0" stroke="#2E1A0F" stroke-width="3"/>
+        <text x="80" y="52" text-anchor="middle" font-family="Georgia" font-size="15" font-style="italic" fill="#3E2414">Artisan</text>
+        <text x="80" y="72" text-anchor="middle" font-family="Georgia" font-size="18" font-weight="700" fill="#3E2414">72%</text>
+        <circle cx="115" cy="28" r="13" fill="#1E7A46"/><path d="M109 30 q6 -10 12 -4 q-6 8 -12 4z" fill="#fff"/>
+      </svg>
+      <strong>Artisan 72%</strong><br><span class="price">$6.00</span><br><small>Small batch, ethically sourced</small>
+    </button>
+    <button type="button" class="bar-choice" data-bar="2" aria-pressed="false">
+      <svg viewBox="0 0 160 110" width="100%" height="110" role="img" aria-label="Blue wrapper labeled Power Choc with a gold lightning bolt">
+        <rect x="20" y="22" width="120" height="66" rx="10" fill="#1F5FA8" stroke="#2E1A0F" stroke-width="3"/>
+        <text x="88" y="61" text-anchor="middle" font-family="Arial" font-size="14" font-weight="900" fill="#fff">POWER CHOC</text>
+        <path d="M30 30 l10 0 -6 12 8 0 -14 18 4 -13 -7 0z" fill="#E8B84A"/>
+      </svg>
+      <strong>Power Choc</strong><br><span class="price">$3.00</span><br><small>20 g protein, gym-bag friendly</small>
+    </button>
+  </div>
+  <div id="warmFeedback" class="feedback info" aria-live="polite"></div>
+  <label for="warmReason" style="display:block;margin-top:14px">Which characteristic of <em>you</em> as a customer drove your choice — price sensitivity, status, convenience, values, health, or brand loyalty? Explain in 1–2 sentences.</label>
+  <textarea id="warmReason" data-save placeholder="I picked ___ because ___. That means I'm a ___ customer."></textarea>
+  <div class="solo"><strong>On your own:</strong> Pick a bar, read the feedback, and answer the question above. Then tap the three fact cards below.</div>
+
+  <h3>Did You Know? (tap to flip)</h3>
+  <div class="grid-3">
+    <div class="flip"><button type="button" aria-expanded="false" data-front="Cacao beans were once… money?" data-back="Yes! The Aztecs used cacao beans as currency to buy food and goods. Chocolate really did grow on trees as money."><span class="q">Cacao beans were once… money?</span><span class="hint">Tap to reveal</span></button></div>
+    <div class="flip"><button type="button" aria-expanded="false" data-front="Where does most cocoa grow?" data-back="Just two West African countries, Côte d’Ivoire and Ghana, grow roughly 60% of the world’s cocoa. Bad weather in one region can shake chocolate prices everywhere."><span class="q">Where does most cocoa grow?</span><span class="hint">Tap to reveal</span></button></div>
+    <div class="flip"><button type="button" aria-expanded="false" data-front="What happened to cocoa prices in 2024?" data-back="Poor harvests from bad weather and crop disease sent cocoa prices to record highs — several times their usual level. Chocolate makers raised prices and shrank bars."><span class="q">What happened to cocoa prices in 2024?</span><span class="hint">Tap to reveal</span></button></div>
+  </div>
+</section>
+
+<!-- 2 STRATEGY SORT -->
+<section class="station" id="sort" aria-labelledby="h-sort">
+  <div class="station-head">
+    <h2 id="h-sort">Pricing Strategy Sort</h2>
+    <span class="time-tag">7 min <button type="button" data-timer="7" data-name="Strategy Sort">start timer</button></span>
+  </div>
+  <p>Businesses don't pick prices out of a hat. Here are four common pricing strategies:</p>
+  <div class="grid-4">
+    <div class="strat-def" style="background:#5A3420"><h3>Value-based</h3><p>Price is set by what customers <em>believe</em> the product is worth — brand, quality, exclusivity, experience.</p></div>
+    <div class="strat-def" style="background:#174A85"><h3>Competitive</h3><p>Price is set at, slightly above, or slightly below what competitors charge for similar products.</p></div>
+    <div class="strat-def" style="background:#1E6A3E"><h3>Cost-based</h3><p>Start with the per-unit cost, then add the profit you want on each unit. Per-unit cost + desired per-unit profit = price. Common when costs are clear, like custom orders.</p></div>
+    <div class="strat-def" style="background:#6A2C82"><h3>Penetration</h3><p>Launch with a low price to attract customers away from established rivals and grab market share fast.</p></div>
+  </div>
+  <details class="vid-wrap"><summary><span aria-hidden="true">🎬</span> Stuck? Watch a 1-minute explainer: Four Pricing Strategies</summary><div class="player" data-vid="strategies"></div></details>
+  <h3>Match each chocolate product to its strategy</h3>
+  <div class="grid-4" id="sortCards"></div>
+  <div class="row"><button type="button" class="btn gold" id="checkSort">Check my matches</button><button type="button" class="btn ghost" id="resetSort">Reset</button></div>
+  <div id="sortFeedback" class="feedback" aria-live="polite"></div>
+  <div class="solo"><strong>On your own:</strong> Read the four strategies, choose one for each product from its menu, then click "Check my matches." Read every explanation, even for the ones you got right.</div>
+</section>
+
+<!-- 3 COCOA CRUNCH -->
+<section class="station" id="power" aria-labelledby="h-power">
+  <div class="station-head">
+    <h2 id="h-power">The Cocoa Crunch: Who Has Pricing Power?</h2>
+    <span class="time-tag">8 min <button type="button" data-timer="8" data-name="Cocoa Crunch">start timer</button></span>
+  </div>
+  <p><strong>Pricing power</strong> is a business's ability to raise prices without losing too many customers. Market conditions can give a business more of it — or take it away. A key idea: <strong>price elasticity of demand</strong>. If customers buy a lot less when the price goes up, demand is <em>elastic</em> (pricing power is low). If they keep buying anyway, demand is <em>inelastic</em> (pricing power is high).</p>
+  <details class="vid-wrap"><summary><span aria-hidden="true">🎬</span> Stuck? Watch a 1-minute explainer: Pricing Power and Elasticity</summary><div class="player" data-vid="power"></div></details>
+  <div class="power-wrap">
+    <div>
+      <svg viewBox="0 0 260 200" width="100%" role="img" aria-labelledby="meterT meterD">
+        <title id="meterT">Pricing power meter</title>
+        <desc id="meterD">A semicircle gauge from Limited to Strong with a needle in the middle.</desc>
+        <path d="M30 160 A100 100 0 0 1 230 160" fill="none" stroke="#E5DCCB" stroke-width="26"/>
+        <path d="M30 160 A100 100 0 0 1 80 73" fill="none" stroke="#B3261E" stroke-width="26"/>
+        <path d="M180 73 A100 100 0 0 1 230 160" fill="none" stroke="#1E7A46" stroke-width="26"/>
+        <text x="30" y="190" font-size="13" font-weight="700" fill="#8A1C16" text-anchor="middle">Limited</text>
+        <text x="230" y="190" font-size="13" font-weight="700" fill="#145232" text-anchor="middle">Strong</text>
+        <g id="needle" style="transition:transform .6s;transform-origin:130px 160px"><line x1="130" y1="160" x2="130" y2="72" stroke="#0F1B33" stroke-width="6" stroke-linecap="round"/></g>
+        <circle cx="130" cy="160" r="12" fill="#E8B84A" stroke="#0F1B33" stroke-width="3"/>
+      </svg>
+      <div class="speech" style="margin-top:12px">Wait… my bar costs the same, but there's less of it?!</div>
+      <div class="callout" style="margin:0"><strong>Shrinkflation:</strong> when costs rise but pricing power is weak, some companies keep the price the same and shrink the product instead. Smart strategy or sneaky? You decide in the box below.</div>
+    </div>
+    <div>
+      <div class="scenario-card" aria-live="polite">
+        <span class="num" id="pwNum">Headline 1 of 6</span>
+        <p id="pwText"></p>
+      </div>
+      <div class="row" role="group" aria-label="Does this increase or limit pricing power?">
+        <button type="button" class="btn ghost" data-power="up">⬆ Increases pricing power</button>
+        <button type="button" class="btn ghost" data-power="down">⬇ Limits pricing power</button>
+      </div>
+      <div id="pwFeedback" class="feedback" aria-live="polite"></div>
+      <div class="row">
+        <button type="button" class="btn" id="pwNext" disabled>Next headline</button>
+        <button type="button" class="btn ghost" id="pwReset">Start over</button>
+        <span id="pwScore" aria-live="polite" style="font-family:var(--mono)">Score: 0 / 0</span>
+      </div>
+      <label for="shrinkResp" style="display:block;margin-top:16px">Shrinkflation: smart pricing or sneaky? Defend your answer in 1–2 sentences, and say what it would do to customer trust.</label>
+      <textarea id="shrinkResp" data-save></textarea>
+    </div>
+  </div>
+  <div class="solo"><strong>On your own:</strong> For each of the six headlines, decide whether it increases or limits pricing power, read the explanation, then click "Next headline." Finish with the shrinkflation question.</div>
+</section>
+
+<!-- 4 PRICE YOUR BAR LAB -->
+<section class="station" id="lab" aria-labelledby="h-lab">
+  <div class="station-head">
+    <h2 id="h-lab">Price Your Bar Lab</h2>
+    <span class="time-tag">15 min <button type="button" data-timer="15" data-name="Price Your Bar">start timer</button></span>
+  </div>
+  <p>You're the marketing manager for a new small-batch chocolate bar. The main competitor sells a similar bar for <strong>$3.00</strong>. Choose your customer and strategy, set your price, and watch how demand and profit respond. Different customer segments react to price differently!</p>
+  <div class="grid-2">
+    <div>
+      <fieldset>
+        <legend>1 · Product &amp; customer</legend>
+        <label for="barName">Bar name</label>
+        <input type="text" id="barName" data-save maxlength="18" value="Cocoa Comet">
+        <label for="flavor">Flavor</label>
+        <select id="flavor" data-save>
+          <option>sea salt caramel</option><option>dark chili</option><option>cookies &amp; cream</option>
+          <option>peanut butter crunch</option><option>orange zest</option><option>classic milk</option>
+        </select>
+        <label for="target">Target customer segment</label>
+        <select id="target" data-save>
+          <option value="teens">Teens on a budget (very price sensitive)</option>
+          <option value="health">Health-conscious adults (somewhat price sensitive)</option>
+          <option value="gift">Gift shoppers (not very price sensitive)</option>
+          <option value="athletes">Athletes and gym-goers (somewhat price sensitive)</option>
+          <option value="eco">Eco-minded shoppers (value ethics over price)</option>
+        </select>
+        <div role="radiogroup" aria-label="Wrapper color" class="swatches">
+          <label><input type="radio" name="wrap" value="#B3261E" checked><span class="chip" style="background:#B3261E"></span>Red</label>
+          <label><input type="radio" name="wrap" value="#1F5FA8"><span class="chip" style="background:#1F5FA8"></span>Blue</label>
+          <label><input type="radio" name="wrap" value="#1E7A46"><span class="chip" style="background:#1E7A46"></span>Green</label>
+          <label><input type="radio" name="wrap" value="#6A2C82"><span class="chip" style="background:#6A2C82"></span>Purple</label>
+          <label><input type="radio" name="wrap" value="#0F1B33"><span class="chip" style="background:#0F1B33"></span>Navy</label>
+        </div>
+      </fieldset>
+      <fieldset>
+        <legend>2 · Pricing strategy</legend>
+        <div class="radio-list" role="radiogroup" aria-label="Pricing strategy">
+          <label><input type="radio" name="strategy" value="value" checked> Value-based</label>
+          <label><input type="radio" name="strategy" value="competitive"> Competitive</label>
+          <label><input type="radio" name="strategy" value="cost"> Cost-based</label>
+          <label><input type="radio" name="strategy" value="penetration"> Penetration</label>
+        </div>
+        <div class="range-row"><label for="price">Your price per bar</label><output id="priceOut" for="price"></output><input type="range" id="price" min="1" max="8" step="0.25" value="3.50"></div>
+      </fieldset>
+      <fieldset>
+        <legend>3 · Costs</legend>
+        <div class="range-row"><label for="vCocoa">Cocoa (per bar)</label><output id="vCocoaOut" for="vCocoa"></output><input type="range" id="vCocoa" min="0.20" max="2.50" step="0.05" value="0.60"></div>
+        <div class="range-row"><label for="vOther">Sugar, milk, mix-ins &amp; wrapper (per bar)</label><output id="vOtherOut" for="vOther"></output><input type="range" id="vOther" min="0.20" max="1.50" step="0.05" value="0.60"></div>
+        <div class="range-row"><label for="fixed">Fixed costs per month (kitchen rent, equipment)</label><output id="fixedOut" for="fixed"></output><input type="range" id="fixed" min="400" max="3000" step="50" value="1200"></div>
+      </fieldset>
+    </div>
+    <div>
+      <div class="dash">
+        <svg id="barPreview" viewBox="0 0 260 150" width="100%" role="img" aria-label="Preview of your chocolate bar">
+          <rect x="20" y="20" width="220" height="110" rx="14" id="pvWrap" fill="#B3261E" stroke="#E8B84A" stroke-width="4"/>
+          <rect x="20" y="20" width="44" height="110" rx="14" fill="#5A3420"/><rect x="44" y="20" width="20" height="110" fill="#5A3420"/>
+          <g stroke="#3E2414" stroke-width="2" fill="#7B4A2D"><rect x="28" y="30" width="28" height="26" rx="3"/><rect x="28" y="62" width="28" height="26" rx="3"/><rect x="28" y="94" width="28" height="26" rx="3"/></g>
+          <text id="pvName" x="152" y="58" text-anchor="middle" font-family="Georgia" font-size="20" font-weight="700" fill="#fff">Cocoa Comet</text>
+          <text id="pvFlavor" x="152" y="78" text-anchor="middle" font-family="Arial" font-size="12" fill="#F5D27A">sea salt caramel</text>
+          <circle cx="136" cy="98" r="4" fill="#fff"/><circle cx="168" cy="98" r="4" fill="#fff"/>
+          <path id="pvMouth" d="M138 108 Q152 120 166 108" stroke="#fff" stroke-width="3" fill="none" stroke-linecap="round"/>
+          <g transform="translate(196 104)"><rect width="48" height="22" rx="4" fill="#fff" stroke="#0F1B33" stroke-width="2"/><text id="pvPrice" x="24" y="16" text-anchor="middle" font-family="monospace" font-size="13" font-weight="700" fill="#B3261E">$3.50</text></g>
+        </svg>
+        <h3>Business Dashboard</h3>
+        <div aria-live="polite">
+          <div class="metric"><span>Competitor's price</span><span>$3.00</span></div>
+          <div class="metric"><span>Variable cost per bar</span><span id="mVC"></span></div>
+                    <div class="metric"><span>Contribution margin per bar</span><span id="mCM"></span></div>
+          <div class="metric big"><span>Projected bars sold / month</span><span id="mUnits"></span></div>
+          <div class="metric"><span>Break-even point</span><span id="mBE"></span></div>
+          <div class="meter" aria-hidden="true"><div id="beMeter"></div></div>
+          <small id="beLabel" style="color:#C9D1E3"></small>
+          <div class="metric"><span>Projected revenue</span><span id="mRev"></span></div>
+          <div class="metric big"><span>Projected profit (loss)</span><span id="mProfit"></span></div>
+          <p id="verdict" style="margin:.6em 0 0;font-weight:700"></p>
+          <div class="strat-check" id="stratCheck"></div>
+        </div>
+        <div class="no-print">
+          <h3 style="margin-top:16px">⚡ Cocoa Shock!</h3>
+          <p style="margin:0;color:#E6E9F0;font-size:.95rem">A bad harvest doubles your cocoa cost overnight — a supply-chain market condition. How will you respond?</p>
+          <div class="row">
+            <button type="button" class="btn gold" id="shockBtn">Trigger the shock</button>
+            <button type="button" class="btn ghost" id="shockUndo">Undo shock</button>
+          </div>
+          <div id="shockFeedback" class="feedback info" aria-live="polite"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <details class="vid-wrap"><summary><span aria-hidden="true">🎬</span> Stuck? Watch a 1-minute explainer: Contribution Margin and Break-Even</summary><div class="player" data-vid="breakeven"></div></details>
+  <div class="callout"><strong>How demand works here:</strong> projected sales depend on your price compared with the competitor's $3.00 and on how price sensitive (elastic) your segment is. Teens drop off fast when the price climbs; gift shoppers barely notice. Contribution margin = price − variable cost. Break-even = fixed costs ÷ contribution margin.</div>
+  <label for="labJustify" style="display:block">Justify your pricing decision: Which strategy did you choose, what price did you set, and why is it the best fit for your target customer and market conditions? How did you respond to the Cocoa Shock?</label>
+  <textarea id="labJustify" data-save style="min-height:110px"></textarea>
+  <div class="solo"><strong>On your own:</strong> Try at least three different prices and two different customer segments before you decide. Watch how projected sales change. Then trigger the Cocoa Shock, adjust your plan, and write your justification above.</div>
+</section>
+
+<!-- 5 LEGAL LINE -->
+<section class="station" id="legal" aria-labelledby="h-legal">
+  <div class="station-head">
+    <h2 id="h-legal">The Legal Line</h2>
+    <span class="time-tag">5 min <button type="button" data-timer="5" data-name="Legal Line">start timer</button></span>
+  </div>
+  <div class="grid-2">
+    <div>
+      <p>Businesses have a lot of freedom to set prices, but that freedom has limits. Laws protect fair competition and consumers:</p>
+      <ul>
+        <li><strong>Price fixing:</strong> competitors may not secretly agree to set prices.</li>
+        <li><strong>Predatory pricing:</strong> a business may not price below cost to drive rivals out of business.</li>
+        <li><strong>Price gouging:</strong> sellers may not raise prices because demand jumped during a crisis, such as a natural disaster (illegal in many states).</li>
+        <li><strong>Price discrimination:</strong> a business may not charge different prices for the same product based on race, nationality, sex or another protected status.</li>
+      </ul>
+      <p>Remember: a high price is not automatically illegal! Discounts for groups like students can be legal. Pricing based on a protected status is not.</p>
+    </div>
+    <svg viewBox="0 0 300 180" width="100%" role="img" aria-label="Cartoon of a cacao pod judge in a black robe holding a gavel next to a scale">
+      <rect x="40" y="130" width="220" height="40" rx="6" fill="#5A3420"/>
+      <rect x="40" y="124" width="220" height="10" rx="4" fill="#7B4A2D"/>
+      <g transform="translate(70 30)">
+        <path d="M40 0 C70 6 80 50 70 86 C62 110 18 110 10 86 C0 50 10 6 40 0Z" fill="#C8915F" stroke="#5A3420" stroke-width="4"/>
+        <path d="M6 80 Q40 120 74 80 L80 100 H0Z" fill="#0F1B33"/>
+        <circle cx="29" cy="46" r="5" fill="#0F1B33"/><circle cx="51" cy="46" r="5" fill="#0F1B33"/>
+        <path d="M30 62 Q40 68 50 62" stroke="#0F1B33" stroke-width="3" fill="none" stroke-linecap="round"/>
+        <rect x="18" y="34" width="44" height="3" fill="#0F1B33" opacity=".6"/>
+      </g>
+      <g transform="translate(170 60) rotate(-25)"><rect x="0" y="0" width="40" height="18" rx="4" fill="#7B4A2D" stroke="#2E1A0F" stroke-width="2"/><rect x="17" y="18" width="6" height="40" fill="#7B4A2D" stroke="#2E1A0F" stroke-width="2"/></g>
+      <g transform="translate(220 60)"><line x1="20" y1="0" x2="20" y2="62" stroke="#0F1B33" stroke-width="3"/><line x1="0" y1="10" x2="40" y2="10" stroke="#0F1B33" stroke-width="3"/><path d="M0 10 l-6 18 h12z M40 10 l-6 18 h12z" fill="#E8B84A" stroke="#0F1B33" stroke-width="2"/></g>
+    </svg>
+  </div>
+  <details class="vid-wrap"><summary><span aria-hidden="true">🎬</span> Stuck? Watch a 1-minute explainer: Legal Limits on Pricing</summary><div class="player" data-vid="legal"></div></details>
+  <div id="legalItems"></div>
+  <div class="row"><button type="button" class="btn gold" id="checkLegal">Check my rulings</button></div>
+  <div id="legalFeedback" class="feedback" aria-live="polite"></div>
+  <div class="solo"><strong>On your own:</strong> Choose a ruling for all five cases, then click "Check my rulings" and read each explanation.</div>
+</section>
+
+<!-- 6 EXIT TICKET -->
+<section class="station" id="exit" aria-labelledby="h-exit">
+  <div class="station-head">
+    <h2 id="h-exit">Exit Ticket</h2>
+    <span class="time-tag">5 min <button type="button" data-timer="5" data-name="Exit Ticket">start timer</button></span>
+  </div>
+  <p>Answer all five questions on your own, then check your work.</p>
+  <form id="exitForm" novalidate></form>
+  <div class="row">
+    <button type="button" class="btn gold" id="checkExit">Check my answers</button>
+    <button type="button" class="btn ghost" id="resetExit">Reset</button>
+    <span class="score" id="exitScore" aria-live="polite"></span>
+  </div>
+</section>
+
+<!-- 7 AP PRACTICE -->
+<section class="station" id="ap" aria-labelledby="h-ap">
+  <div class="station-head">
+    <h2 id="h-ap">AP Exam Practice</h2>
+    <span class="time-tag">25 min · next class or homework <button type="button" data-timer="25" data-name="AP Practice">start timer</button></span>
+  </div>
+  <p>Now practice the way the AP Exam asks. These questions follow the College Board sample questions in the course and exam description. There's a multiple-choice set built around a scenario and a figure, a <strong>Business Concept Application</strong> free-response question (FRQ 3 on the exam) and a practice version of the <strong>Business Decision</strong> free-response question (FRQ 4 on the exam).</p>
+  <div class="solo"><strong>On your own:</strong> Watch the task verb video if you need it. Answer the multiple-choice set, then write each free-response part <em>before</em> you open its scoring guidelines. Score yourself honestly. That's how you'll know what to practice next.</div>
+  <details class="vid-wrap"><summary><span aria-hidden="true">🎬</span> Need help? Watch a short explainer on reading task verbs</summary><div class="player" data-vid="verbs"></div></details>
+
+  <h3>Know Your Task Verbs</h3>
+  <dl class="verbs">
+    <div><dt>Identify</dt><dd>Indicate or provide information about a specified topic, without elaboration or explanation.</dd></div>
+    <div><dt>Describe</dt><dd>Provide the relevant characteristics of a specific topic or concept.</dd></div>
+    <div><dt>Explain</dt><dd>Provide information about how or why a relationship, process, pattern, position, situation, or outcome occurs, using evidence and/or reasoning to support or qualify a claim.</dd></div>
+    <div><dt>Compare</dt><dd>Provide a description of similarities and/or differences.</dd></div>
+    <div><dt>Recommend</dt><dd>Articulate a course of action and support it with evidence.</dd></div>
+    <div><dt>Pitch</dt><dd>Describe the product, the target customer, the problem, need, or want the product is intended to address; and explain how the product creates value for customers.</dd></div>
+  </dl>
+  <p class="src">Definitions quoted from the <em>AP Business with Personal Finance Course and Exam Description</em> (College Board), “Task Verbs Used in Free-Response Questions.” Task verbs are <span class="tv">highlighted</span> in the prompts below.</p>
+
+  <h3>Multiple Choice</h3>
+  <div class="stimulus">
+    <p class="stim-lead">Questions 1 through 4 refer to the following.</p>
+    <p>Bean &amp; Blossom Chocolate (B&amp;B) is a startup that makes dark chocolate bars from ethically sourced cocoa. B&amp;B plans to sell its bars at specialty grocers next to several established brands. To attract customers away from those brands quickly, B&amp;B will launch its bar at $2.50. It plans to raise the price to $3.50 once it reaches its market share goal.</p>
+    <p>A survey of shoppers in B&amp;B’s target market found that 70% would switch to a different brand if the price of their usual chocolate bar rose by $0.50. The figure shows the prices and per-unit costs of B&amp;B’s planned bar and three rival bars.</p>
+    <div class="tw" role="region" aria-label="Figure 1" tabindex="0">
+    <table class="fig">
+      <caption>Figure 1. Chocolate Bar Prices and Per-Unit Costs</caption>
+      <thead><tr><th scope="col">Brand</th><th scope="col">Price</th><th scope="col">Per-unit cost</th></tr></thead>
+      <tbody>
+        <tr><th scope="row">B&amp;B (launch price)</th><td>$2.50</td><td>$2.10</td></tr>
+        <tr><th scope="row">Choco Royale</th><td>$3.25</td><td>$1.85</td></tr>
+        <tr><th scope="row">SweetCo</th><td>$2.99</td><td>$1.60</td></tr>
+        <tr><th scope="row">Value Bar</th><td>$1.49</td><td>$0.95</td></tr>
+      </tbody>
+    </table>
+    </div>
+  </div>
+  <form id="apForm" novalidate></form>
+  <div class="row">
+    <button type="button" class="btn gold" id="checkAp">Check my answers</button>
+    <button type="button" class="btn ghost" id="resetAp">Reset</button>
+    <span class="score" id="apMcqScore" aria-live="polite"></span>
+  </div>
+
+  <h3>Free Response: Business Concept Application <span class="pts">3 points</span></h3>
+  <div class="stimulus">
+    <p>Peak Cocoa sells a milk chocolate bar in supermarkets. Rival bars in the candy aisle are very similar and are priced between $2.29 and $2.99. Peak Cocoa’s goal is to increase weekly revenue without losing customers to these rivals.</p>
+    <p>The marketing team ran a three-week in-store price test. Three similar stores each sold the bar at a different price, and the team recorded weekly sales at each store. The team also reviewed an industry report showing that cocoa costs rose sharply over the past year. The figure shows the results of the price test.</p>
+    <div class="tw" role="region" aria-label="Figure 2" tabindex="0">
+    <table class="fig">
+      <caption>Figure 2. Peak Cocoa Price Test Results (weekly averages)</caption>
+      <thead><tr><th scope="col">Store</th><th scope="col">Test price</th><th scope="col">Bars sold per week</th><th scope="col">Weekly revenue</th></tr></thead>
+      <tbody>
+        <tr><th scope="row">Store 1</th><td>$2.49</td><td>600</td><td>$1,494.00</td></tr>
+        <tr><th scope="row">Store 2</th><td>$2.99</td><td>540</td><td>$1,614.60</td></tr>
+        <tr><th scope="row">Store 3</th><td>$3.49</td><td>300</td><td>$1,047.00</td></tr>
+      </tbody>
+    </table>
+    </div>
+  </div>
+  <p class="respond">Respond to parts A, B, and C.</p>
+  <div class="frq-part">
+  <label for="f3a" class="frq-q"><b>(A)</b> <span class="tv">Describe</span> a market research method Peak Cocoa used to gather the information in the scenario.</label>
+  <textarea id="f3a" data-save></textarea>
+  <details class="sg"><summary>Check against the scoring guidelines (1 point)</summary>
+    <p>Examples that earn this point:</p><ul><li>Peak Cocoa conducted primary research by running an in-store price test, selling the bar at three different prices in three similar stores and recording weekly sales.</li><li>Peak Cocoa ran an experiment that tested how customers responded to different prices.</li><li>Peak Cocoa used secondary research when it reviewed an industry report on cocoa costs.</li></ul>
+    <label class="pt-lbl"><input type="checkbox" class="pt" id="pt_f3a_0"> My response earns this point</label>
+    <p class="noearn"><strong>Does not earn credit:</strong> Naming a method with no detail from the scenario (for example, “they did research”), or naming a method that doesn't appear in the scenario, such as a focus group.</p>
+  </details>
+</div>
+<div class="frq-part">
+  <label for="f3b" class="frq-q"><b>(B)</b> <span class="tv">Describe</span> a finding revealed by the research.</label>
+  <textarea id="f3b" data-save></textarea>
+  <details class="sg"><summary>Check against the scoring guidelines (1 point)</summary>
+    <p>Examples that earn this point:</p><ul><li>At $2.99, the bar generated the highest weekly revenue, $1,614.60.</li><li>When the price rose from $2.99 to $3.49, weekly sales fell from 540 to 300 bars, nearly cutting sales in half.</li><li>Raising the price from $2.49 to $2.99 reduced sales only slightly, from 600 to 540 bars, but increased revenue.</li><li>Cocoa costs rose sharply over the past year, according to the industry report.</li></ul>
+    <label class="pt-lbl"><input type="checkbox" class="pt" id="pt_f3b_0"> My response earns this point</label>
+    <p class="noearn"><strong>Does not earn credit:</strong> A finding with no data or detail from the scenario (for example, “price matters to customers”).</p>
+  </details>
+</div>
+<div class="frq-part">
+  <label for="f3c" class="frq-q"><b>(C)</b> <span class="tv">Explain</span> how Peak Cocoa could use a finding from the research to achieve a business goal.</label>
+  <textarea id="f3c" data-save></textarea>
+  <details class="sg"><summary>Check against the scoring guidelines (1 point)</summary>
+    <p>Examples that earn this point:</p><ul><li>Because $2.99 produced the most revenue and is still within rivals' $2.29–$2.99 range, Peak Cocoa could use competitive pricing at $2.99 to increase weekly revenue without losing customers to rivals.</li><li>Sales dropped sharply at $3.49, which shows customers are highly price sensitive above $2.99. Peak Cocoa should avoid that price, because it would push customers to rival bars and lower revenue and market share.</li><li>Because cocoa costs are rising but customers respond strongly to price, Peak Cocoa has limited pricing power. It could raise its price only to $2.99 and look for other ways to cut per-unit costs to protect profit.</li></ul>
+    <label class="pt-lbl"><input type="checkbox" class="pt" id="pt_f3c_0"> My response earns this point</label>
+    <p class="noearn"><strong>Does not earn credit:</strong> Restating a finding without connecting it to a goal, or naming a goal without explaining how the finding helps reach it (no “because” or “which leads to” link).</p>
+  </details>
+</div>
+
+  <h3>Free Response: Business Decision (practice version) <span class="pts">6 points</span></h3>
+  <div class="stimulus">
+    <p><em>You have been hired as a consultant to help the business described in the scenario decide between two possible courses of action.</em></p>
+    <p>One year after launch, Bean &amp; Blossom Chocolate (B&amp;B) reached its market share goal and now sells its 3.0-ounce bar for $3.50. B&amp;B sells about 1,000 bars per week. Its brand is built on ethically sourced cocoa and honest labeling, and loyal customers often recommend the brand online.</p>
+    <p>After poor cocoa harvests in West Africa, B&amp;B’s per-unit cost for the 3.0-ounce bar rose from $2.10 to $2.80. A customer survey found that 62% of B&amp;B customers check package size when they shop. It also found that 70% would feel “misled” if a brand made a product smaller without telling them.</p>
+    <p><strong>Option 1: Raise the price.</strong> Keep the 3.0-ounce bar and raise the price to $3.99.<br><strong>Option 2: Shrink the bar.</strong> Keep the $3.50 price and reduce the bar to 2.6 ounces. This uses less cocoa, so the per-unit cost falls to $2.45. Projected sales assume most customers will not notice the change.</p>
+    <div class="tw" role="region" aria-label="Figure 3" tabindex="0">
+    <table class="fig">
+      <caption>Figure 3. Projected Results of B&amp;B’s Two Options</caption>
+      <thead><tr><th scope="col">Option</th><th scope="col">Price</th><th scope="col">Per-unit cost</th><th scope="col">Per-unit profit</th><th scope="col">Projected bars sold per week</th><th scope="col">Projected weekly profit (before fixed costs)</th></tr></thead>
+      <tbody>
+        <tr><th scope="row">1: Raise the price</th><td>$3.99</td><td>$2.80</td><td>$1.19</td><td>800</td><td>$952.00</td></tr>
+        <tr><th scope="row">2: Shrink the bar</th><td>$3.50</td><td>$2.45</td><td>$1.05</td><td>950</td><td>$997.50</td></tr>
+      </tbody>
+    </table>
+    </div>
+  </div>
+  <p class="respond">Respond to parts A, B, and C.</p>
+  <div class="frq-part">
+  <label for="f4a" class="frq-q"><b>(A)</b> Like all businesses, B&amp;B is affected by market and external factors that have an impact on its ability to achieve its goals.<br>i. <span class="tv">Describe</span> a market or an external factor indicated in the scenario that affects B&amp;B.<br>ii. <span class="tv">Explain</span> how the factor you selected in part A(i) creates an opportunity or a problem for B&amp;B.</label>
+  <textarea id="f4a" data-save></textarea>
+  <details class="sg"><summary>Check against the scoring guidelines (2 points)</summary>
+    <p class="crit"><strong>i. Describe a factor (1 point)</strong></p>
+    <p>Examples that earn this point:</p><ul><li>Poor cocoa harvests in West Africa (an external, supply-chain factor) raised B&amp;B's per-unit cost from $2.10 to $2.80.</li><li>B&amp;B's customers are attentive shoppers: 62% check package size.</li></ul>
+    <label class="pt-lbl"><input type="checkbox" class="pt" id="pt_f4a_0"> My response earns this point</label>
+    <p class="crit"><strong>ii. Explain how it creates an opportunity or a problem (1 point)</strong></p>
+    <p>Examples that earn this point:</p><ul><li>The cocoa shortage is a problem because it cuts B&amp;B's per-unit profit from $1.40 to $0.70 at the current price. B&amp;B has to raise its price, reduce its costs or accept much lower profit.</li><li>Because so many customers check package size, shrinking the bar is a problem. Customers are likely to notice, which could hurt the trust B&amp;B's brand depends on.</li></ul>
+    <label class="pt-lbl"><input type="checkbox" class="pt" id="pt_f4a_1"> My response earns this point</label>
+    <p class="noearn"><strong>Does not earn credit:</strong> Naming a factor without scenario evidence, or describing the factor again in part ii without explaining its effect on B&amp;B.</p>
+  </details>
+</div>
+<div class="frq-part">
+  <label for="f4b" class="frq-q"><b>(B)</b> There are financial and nonfinancial criteria that can be used to compare the two options.<br>i. Using projected weekly profit as a criterion, <span class="tv">describe</span> a difference or similarity between the two options. Include specific evidence related to each option.<br>ii. Using one nonfinancial criterion relevant to the decision, <span class="tv">describe</span> a difference or similarity between the two options. Include specific evidence related to each option.</label>
+  <textarea id="f4b" data-save></textarea>
+  <details class="sg"><summary>Check against the scoring guidelines (2 points)</summary>
+    <p class="crit"><strong>i. Financial criterion (1 point)</strong></p>
+    <p>Examples that earn this point:</p><ul><li>Option 2 has a higher projected weekly profit ($997.50) than Option 1 ($952.00), a difference of $45.50 per week.</li><li>Both options are projected to stay profitable, earning $952.00 and $997.50 per week before fixed costs.</li></ul>
+    <label class="pt-lbl"><input type="checkbox" class="pt" id="pt_f4b_0"> My response earns this point</label>
+    <p class="crit"><strong>ii. Nonfinancial criterion (1 point)</strong></p>
+    <p>Examples that earn this point:</p><ul><li>Customer trust and brand reputation: Option 1 keeps B&amp;B's honest-labeling promise by openly raising the price. Option 2 risks the 70% of customers who would feel misled by a smaller bar.</li><li>Customer loyalty: under Option 1, some price-sensitive customers may leave (sales are projected to drop to 800). Under Option 2, loyal customers who notice the smaller bar may stop recommending B&amp;B online.</li></ul>
+    <label class="pt-lbl"><input type="checkbox" class="pt" id="pt_f4b_1"> My response earns this point</label>
+    <p class="noearn"><strong>Does not earn credit:</strong> A comparison that uses evidence for only one option, or a nonfinancial criterion that isn't connected to the scenario.</p>
+  </details>
+</div>
+<div class="frq-part">
+  <label for="f4c" class="frq-q"><b>(C)</b> <span class="tv">Recommend</span> a course of action for B&amp;B. In your response, you should do the following:<br>• Recommend one of the two options in the scenario.<br>• <span class="tv">Explain</span> why you recommend that option.<br>• Support your recommendation using two specific criteria, which may include the criteria from part B. Include evidence from the scenario related to each criterion you use.</label>
+  <textarea id="f4c" data-save></textarea>
+  <details class="sg"><summary>Check against the scoring guidelines (2 points)</summary>
+    <p class="crit"><strong>Recommend and explain (1 point)</strong></p>
+    <p>Examples that earn this point:</p><ul><li>I recommend Option 1. Raising the price openly protects the honest brand that B&amp;B's loyal customers value, which matters more in the long run than a small short-term profit difference.</li><li>I recommend Option 2. It earns more profit each week while keeping the price customers are used to, which protects B&amp;B's market share.</li></ul>
+    <label class="pt-lbl"><input type="checkbox" class="pt" id="pt_f4c_0"> My response earns this point</label>
+    <p class="crit"><strong>Support with two criteria and evidence (1 point)</strong></p>
+    <p>Examples that earn this point:</p><ul><li>Option 1: Although it earns $45.50 less per week ($952.00 vs. $997.50), it avoids misleading the 70% of customers who would feel misled by a smaller bar. That protects the trust and online recommendations B&amp;B's brand depends on.</li><li>Option 2: It earns $997.50 per week instead of $952.00, and keeping the $3.50 price avoids losing about 200 price-sensitive customers each week. B&amp;B could reduce trust risk by clearly labeling the new size.</li></ul>
+    <label class="pt-lbl"><input type="checkbox" class="pt" id="pt_f4c_1"> My response earns this point</label>
+    <p class="noearn"><strong>Does not earn credit:</strong> Recommending both options or neither (“it depends”), or a recommendation without evidence from the scenario for each criterion.</p>
+  </details>
+</div>
+  <div class="callout">On the actual exam, the Business Decision question is worth 8 points. You'll compare the options using projected return on investment plus additional financial and nonfinancial criteria, then support your recommendation with three criteria. This practice version uses two criteria.</div>
+  <p class="score" id="frqScore" aria-live="polite"></p>
+</section>
+
+<!-- 8 CONNECT -->
+<section class="station" id="bcp" aria-labelledby="h-bcp">
+  <div class="station-head">
+    <h2 id="h-bcp">Connect to Your Business Canvas Project</h2>
+    <span class="time-tag">3 min <button type="button" data-timer="3" data-name="Connect">start timer</button></span>
+  </div>
+  <p>Price and pricing strategy is a Business Canvas Project element that requires <strong>hypothesis testing</strong>. Use today's thinking to draft a first pricing strategy hypothesis for your own product.</p>
+  <div class="hyp">We believe that <b>[target customer]</b> will pay <b>[price]</b> for <b>[product]</b> using a <b>[pricing strategy]</b> strategy, because <b>[reason: customer values, costs, competitor prices, or market conditions]</b>. We will test this by <b>[research method]</b>.</div>
+  <label for="bcpHyp" style="display:block;margin-top:14px">My draft pricing strategy hypothesis:</label>
+  <textarea id="bcpHyp" data-save style="min-height:100px"></textarea>
+
+  <h3>Turn in your work</h3>
+  <p>Click the button to collect all your answers. Then <strong>copy</strong> and paste them into your class assignment, or <strong>print / save as PDF</strong>.</p>
+  <div class="row no-print">
+    <button type="button" class="btn gold" id="buildSummary">Build my work summary</button>
+    <button type="button" class="btn" id="copySummary">Copy</button>
+    <button type="button" class="btn ghost" id="printSummary">Print / save as PDF</button>
+    <button type="button" class="btn ghost" id="clearAll">Clear saved answers</button>
+  </div>
+  <label for="summaryBox" class="sr-only">Work summary</label>
+  <textarea id="summaryBox" readonly placeholder="Your work summary will appear here."></textarea>
+  <div id="copyFeedback" class="feedback info" aria-live="polite"></div>
+</section>
+
+</main>
+
+<div class="timer no-print" id="timer" role="region" aria-label="Lesson timer">
+  <span class="label" id="timerLabel">Lesson timer</span>
+  <span class="clock" id="clock" role="timer" aria-live="off">5:00</span>
+  <button type="button" id="tStart">Start</button>
+  <button type="button" id="tReset">Reset</button>
+  <button type="button" id="tHide" aria-expanded="true" aria-controls="clock">Hide</button>
+</div>
+<div id="timerAnnounce" class="sr-only" aria-live="assertive"></div>
+
+<footer>AP Business with Personal Finance · Project 2: Marketing · Task 5: Price and Pricing Strategies · National Chocolate Day lesson.<br>Scenarios and numbers are simplified for classroom learning.</footer>
+
+<script>
+(function(){
+  "use strict";
+  const $ = (s, r=document) => r.querySelector(s);
+  const $$ = (s, r=document) => Array.from(r.querySelectorAll(s));
+  const money = n => (n<0?"-":"") + "$" + Math.abs(n).toFixed(2);
+  const money0 = n => (n<0?"-":"") + "$" + Math.abs(Math.round(n)).toLocaleString();
+  const KEY = "sweetPricing.v1";
+  let store = {};
+  try { store = JSON.parse(localStorage.getItem(KEY) || "{}") || {}; } catch(e){ store = {}; }
+  function save(){ try { localStorage.setItem(KEY, JSON.stringify(store)); } catch(e){} }
+  const results = store.results || (store.results = {});
+
+  /* restore + save text fields */
+  $$("[data-save]").forEach(el=>{
+    if(store[el.id] !== undefined) el.value = store[el.id];
+    el.addEventListener("input", ()=>{ store[el.id]=el.value; save(); });
+    el.addEventListener("change", ()=>{ store[el.id]=el.value; save(); });
+  });
+
+  /* ---------- TIMER ---------- */
+  let tTotal=300, tLeft=300, tInt=null;
+  const clock=$("#clock"), tStart=$("#tStart");
+  function drawClock(){ clock.textContent = Math.floor(tLeft/60)+":"+String(tLeft%60).padStart(2,"0"); }
+  function stopT(){ clearInterval(tInt); tInt=null; tStart.textContent="Start"; }
+  function startT(){
+    if(tInt){ stopT(); return; }
+    if(tLeft<=0) tLeft=tTotal;
+    tStart.textContent="Pause"; $("#timer").classList.remove("done");
+    tInt=setInterval(()=>{ tLeft--; drawClock(); if(tLeft<=0){ stopT(); $("#timer").classList.add("done"); $("#timerAnnounce").textContent="Time is up for "+$("#timerLabel").textContent+"."; } },1000);
+  }
+  tStart.addEventListener("click", startT);
+  $("#tReset").addEventListener("click", ()=>{ stopT(); tLeft=tTotal; drawClock(); $("#timer").classList.remove("done"); });
+  $$("[data-timer]").forEach(b=>b.setAttribute("aria-label","Start "+b.dataset.timer+"-minute "+b.dataset.name+" timer"));
+  $$("[data-timer]").forEach(b=>b.addEventListener("click", ()=>{ stopT(); tTotal=tLeft=parseInt(b.dataset.timer,10)*60; $("#timerLabel").textContent=b.dataset.name; drawClock(); startT(); }));
+  drawClock();
+  const tHide=$("#tHide");
+  tHide.addEventListener("click", ()=>{
+    const min=$("#timer").classList.toggle("min");
+    tHide.textContent = min ? "⏱ Timer" : "Hide";
+    tHide.setAttribute("aria-expanded", String(!min));
+    tHide.setAttribute("aria-label", min ? "Show lesson timer" : "Hide lesson timer");
+  });
+  tHide.setAttribute("aria-label","Hide lesson timer");
+  $$("[data-timer]").forEach(b=>b.addEventListener("click", ()=>{ if($("#timer").classList.contains("min")) tHide.click(); }));
+
+  /* ---------- WARM UP ---------- */
+  const bars=["Mega Bar ($1.25)","Artisan 72% ($6.00)","Power Choc ($3.00)"];
+  const barMsgs=[
+    "Mega Bar: you're price sensitive and want quantity. Budget brands often use competitive pricing and win on volume — low price, low margin, lots of sales.",
+    "Artisan 72%: you'll pay more for quality and values. This brand uses value-based pricing — customers pay for what the bar means to them, not just the cocoa inside.",
+    "Power Choc: you want a function (protein). This brand targets a niche segment and can charge more than a regular bar because few competitors offer the same benefit."
+  ];
+  function pickBar(i){
+    $$(".bar-choice").forEach((b,j)=>b.setAttribute("aria-pressed", j===i?"true":"false"));
+    $("#warmFeedback").textContent=barMsgs[i];
+  }
+  $$(".bar-choice").forEach(btn=>btn.addEventListener("click", ()=>{ const i=+btn.dataset.bar; pickBar(i); results.bar=bars[i]; save(); }));
+  if(results.bar) pickBar(bars.indexOf(results.bar));
+  $$(".flip button").forEach((b,k)=>{
+    const ans=document.createElement("p");
+    ans.className="ans"; ans.id="fact"+k; ans.hidden=true; ans.textContent=b.dataset.back;
+    b.parentElement.appendChild(ans); b.setAttribute("aria-controls", ans.id);
+    b.addEventListener("click", ()=>{
+      const open=b.getAttribute("aria-expanded")==="true";
+      b.setAttribute("aria-expanded", String(!open)); ans.hidden=open;
+      b.querySelector(".hint").textContent = open ? "Tap to reveal" : "Tap to hide";
+    });
+  });
+
+  /* ---------- STRATEGY SORT ---------- */
+  const S={value:"Value-based",competitive:"Competitive",cost:"Cost-based",penetration:"Penetration"};
+  const sortItems=[
+    {n:"Midnight Velvet Truffle Box", p:"$40 for 12 pieces", d:"Gold box, handwritten card, marketed as the ultimate anniversary gift.", a:"value",
+     svg:'<rect x="40" y="20" width="120" height="60" rx="6" fill="#0F1B33" stroke="#E8B84A" stroke-width="4"/><path d="M100 20 v60 M40 50 h120" stroke="#E8B84A" stroke-width="5"/><path d="M100 20 q-18 -16 -26 -2 q10 6 26 2 q18 -16 26 -2 q-10 6 -26 2z" fill="#E8B84A"/>',
+     e:"Value-based: the price reflects the gifting experience, status, and presentation — customers pay for meaning, not ingredients."},
+    {n:"Store-Brand Milk Bar", p:"$1.19", d:"The grocery store checks the name brands next to it ($1.19–$1.29) and matches the low end.", a:"competitive",
+     svg:'<rect x="30" y="30" width="60" height="40" rx="5" fill="#C0392B"/><rect x="110" y="30" width="60" height="40" rx="5" fill="#1F5FA8"/><text x="60" y="56" text-anchor="middle" font-size="12" font-weight="700" fill="#fff">$1.29</text><text x="140" y="56" text-anchor="middle" font-size="12" font-weight="700" fill="#fff">$1.19</text><text x="100" y="56" text-anchor="middle" font-size="16" font-weight="700" fill="#0F1B33">=</text>',
+     e:"Competitive: the price is set by looking at what nearby rivals charge for a similar product."},
+    {n:"Custom Logo Chocolates", p:"$2.40 each", d:"A chocolatier prints a company's logo on bars for an event. Each bar costs $1.60 to make, and the chocolatier adds $0.80 profit per bar.", a:"cost",
+     svg:'<rect x="60" y="24" width="80" height="52" rx="6" fill="#5A3420" stroke="#2E1A0F" stroke-width="3"/><circle cx="100" cy="50" r="14" fill="#E8B84A"/><text x="100" y="55" text-anchor="middle" font-size="13" font-weight="900" fill="#0F1B33">LOGO</text><text x="170" y="40" font-size="14" font-weight="700" fill="#1E6A3E">+$0.80</text>',
+     e:"Cost-based: $1.60 per-unit cost + $0.80 desired per-unit profit = $2.40. Clear per-unit costs that can be explained to customers make cost-based pricing common for custom orders."},
+    {n:"Bean Rocket (new brand)", p:"$0.99 launch price", d:"A new brand launches far below rivals' $2.50 to win fans fast, planning to raise the price later.", a:"penetration",
+     svg:'<path d="M100 14 q24 18 18 52 h-36 q-6 -34 18 -52z" fill="#6A2C82" stroke="#2E1A0F" stroke-width="3"/><circle cx="100" cy="40" r="8" fill="#fff"/><path d="M84 66 l-12 14 14 -4z M116 66 l12 14 -14 -4z" fill="#E8B84A"/><path d="M92 68 q8 18 16 0" fill="#F28C28"/>',
+     e:"Penetration: a low launch price pulls customers away from established brands to gain market share quickly."}
+  ];
+  const optOrder=["competitive","penetration","value","cost"];
+  const sc=$("#sortCards");
+  sc.innerHTML = sortItems.map((it,i)=>
+    '<div class="sort-card" id="sc'+i+'"><svg viewBox="0 0 200 90" aria-hidden="true">'+it.svg+'</svg>'+
+    '<strong>'+it.n+'</strong><span class="price">'+it.p+'</span><small>'+it.d+'</small>'+
+    '<label for="sortSel'+i+'">Strategy<span class="sr-only"> for '+it.n+'</span></label><select id="sortSel'+i+'"><option value="">Choose…</option>'+
+    optOrder.map(k=>'<option value="'+k+'">'+S[k]+'</option>').join("")+'</select>'+
+    '<div class="feedback" id="sortFb'+i+'" aria-live="polite"></div></div>').join("");
+  $("#checkSort").addEventListener("click", ()=>{
+    let right=0, missing=0;
+    sortItems.forEach((it,i)=>{
+      const v=$("#sortSel"+i).value, card=$("#sc"+i), fb=$("#sortFb"+i);
+      card.classList.remove("right","wrong");
+      if(!v){ missing++; fb.className="feedback bad"; fb.textContent="Choose a strategy."; return; }
+      const ok=v===it.a; if(ok) right++;
+      card.classList.add(ok?"right":"wrong");
+      fb.className="feedback "+(ok?"good":"bad");
+      fb.textContent=(ok?"✅ ":"❌ ")+it.e;
+    });
+    const f=$("#sortFeedback");
+    f.className="feedback "+(right===4?"good":"info");
+    f.textContent = missing ? "Choose a strategy for every product first." : "You matched "+right+" of 4. "+(right===4?"Sweet! You're a pricing pro.":"Read the explanations, adjust, and check again.");
+    if(!missing){ results.sort=right+" / 4"; save(); }
+  });
+  $("#resetSort").addEventListener("click", ()=>{ sortItems.forEach((it,i)=>{ $("#sortSel"+i).value=""; $("#sc"+i).classList.remove("right","wrong"); const fb=$("#sortFb"+i); fb.textContent=""; fb.className="feedback"; }); $("#sortFeedback").textContent=""; });
+
+  /* ---------- COCOA CRUNCH ---------- */
+  const pw=[
+    {t:"Shoppers at a gas station can choose from dozens of nearly identical chocolate bars right next to each other.", a:"down", e:"Many close substitutes make demand elastic: raise your price and customers simply grab the bar next to yours. Pricing power is limited."},
+    {t:"Your brand has fiercely loyal fans who post that nothing else tastes like it.", a:"up", e:"Brand loyalty and differentiation make demand less elastic. Loyal customers keep buying even if the price rises, so pricing power increases."},
+    {t:"A recession hits. Families are cutting back on treats and buying store brands.", a:"down", e:"In a recession, consumers become more price sensitive and reduce spending on wants. Raising prices is risky, so pricing power is limited."},
+    {t:"It's the week before Valentine's Day, and demand for premium chocolate gift boxes spikes.", a:"up", e:"High seasonal demand and gift buyers who care more about the occasion than the price give sellers more room to raise prices."},
+    {t:"A supply-chain shortage triples cocoa costs — but your customers are teens who say they'll switch to gummy candy if prices rise.", a:"down", e:"Rising costs push you to raise prices, but elastic, price-sensitive demand means you can't pass the full cost to customers. This is exactly when companies turn to shrinkflation or cost cutting."},
+    {t:"Your bar is the only certified allergen-free chocolate sold in your town.", a:"up", e:"With few or no substitutes for customers who need allergen-free food, demand is inelastic. A unique product gives strong pricing power."}
+  ];
+  let pi=0, pAns=false, pRight=0, pTried=0;
+  function needle(dir){ $("#needle").style.transform = dir==="up"?"rotate(55deg)":dir==="down"?"rotate(-55deg)":"rotate(0deg)"; }
+  function showPw(){
+    pAns=false; needle(null);
+    $("#pwNum").textContent="Headline "+(pi+1)+" of "+pw.length;
+    $("#pwText").textContent=pw[pi].t;
+    const f=$("#pwFeedback"); f.textContent=""; f.className="feedback";
+    $$("[data-power]").forEach(b=>b.setAttribute("aria-pressed","false"));
+    $("#pwNext").disabled=true;
+  }
+  $$("[data-power]").forEach(b=>b.addEventListener("click", ()=>{
+    if(pAns) return; pAns=true; pTried++;
+    $$("[data-power]").forEach(x=>x.setAttribute("aria-pressed", x===b?"true":"false"));
+    const ok=b.dataset.power===pw[pi].a; if(ok) pRight++;
+    needle(pw[pi].a);
+    const f=$("#pwFeedback"); f.className="feedback "+(ok?"good":"bad");
+    f.textContent=(ok?"✅ Correct! ":"❌ Not quite. ")+pw[pi].e;
+    $("#pwScore").textContent="Score: "+pRight+" / "+pTried;
+    if(pi<pw.length-1) $("#pwNext").disabled=false;
+    else { f.textContent+="  🎉 That's all six! Final score: "+pRight+" / "+pTried+"."; results.crunch=pRight+" / "+pTried; save(); }
+  }));
+  $("#pwNext").addEventListener("click", ()=>{ if(pi<pw.length-1){ pi++; showPw(); } });
+  $("#pwReset").addEventListener("click", ()=>{ pi=0; pRight=0; pTried=0; $("#pwScore").textContent="Score: 0 / 0"; showPw(); });
+  showPw();
+
+  /* ---------- PRICE YOUR BAR LAB ---------- */
+  const COMP=3.00;
+  const seg={teens:{n:"teens on a budget",base:1400,e:2.4},health:{n:"health-conscious adults",base:700,e:1.1},gift:{n:"gift shoppers",base:450,e:0.5},athletes:{n:"athletes and gym-goers",base:800,e:1.3},eco:{n:"eco-minded shoppers",base:550,e:0.8}};
+  const ids=["price","vCocoa","vOther","fixed"];
+  const el=Object.fromEntries(ids.map(i=>[i,$("#"+i)]));
+  ["price","vCocoa","vOther","fixed"].forEach(i=>{ if(store["lab_"+i]!==undefined) el[i].value=store["lab_"+i]; });
+  if(store.lab_wrap){ const r=$('input[name="wrap"][value="'+store.lab_wrap+'"]'); if(r) r.checked=true; }
+  if(store.lab_strategy){ const r=$('input[name="strategy"][value="'+store.lab_strategy+'"]'); if(r) r.checked=true; }
+  let shocked=false, baseCocoa=null;
+  const v=i=>parseFloat(el[i].value);
+  function calc(){
+    const price=v("price"), vc=v("vCocoa")+v("vOther"), fc=v("fixed"), s=seg[$("#target").value], strat=$('input[name="strategy"]:checked').value;
+    $("#priceOut").textContent=money(price); $("#vCocoaOut").textContent=money(v("vCocoa")); $("#vOtherOut").textContent=money(v("vOther")); $("#fixedOut").textContent=money0(fc);
+    const units=Math.max(0, Math.round(s.base*Math.pow(COMP/price, s.e)/10)*10);
+    const cm=price-vc, rev=price*units, profit=rev-(fc+vc*units);
+    const be = cm>0 ? Math.ceil(fc/cm) : Infinity;
+    $("#mVC").textContent=money(vc);
+    $("#mCM").textContent=money(cm);
+    $("#mUnits").textContent=units.toLocaleString();
+    $("#mBE").textContent=isFinite(be)?be.toLocaleString()+" bars":"Never";
+    $("#beMeter").style.width=(isFinite(be)?Math.min(100,units/be*100):0)+"%";
+    $("#beLabel").textContent=isFinite(be)?"Projected sales cover "+Math.round(units/be*100)+"% of break-even":"Price is at or below variable cost — every bar loses money!";
+    $("#mRev").textContent=money0(rev);
+    const p=$("#mProfit"); p.textContent=profit<0?"("+money0(-profit)+")":money0(profit); p.className=profit>=0?"profit-pos":"profit-neg";
+    const mouth=$("#pvMouth"), verdict=$("#verdict");
+    if(!isFinite(be)){ verdict.textContent="🚨 Negative contribution margin. Raise your price or cut variable costs."; mouth.setAttribute("d","M138 114 Q152 102 166 114"); }
+    else if(profit>=0){ verdict.textContent="🎉 Profitable! You beat break-even by "+(units-be).toLocaleString()+" bars."; mouth.setAttribute("d","M138 108 Q152 120 166 108"); }
+    else { verdict.textContent="😬 Short of break-even by "+(be-units).toLocaleString()+" bars. Try a different price, segment, or cost."; mouth.setAttribute("d","M138 112 L166 112"); }
+    // strategy check
+    let msg="";
+    const diff=price-COMP;
+    if(strat==="penetration") msg = diff < -0.25 ? "✅ Penetration: you're priced well below the $3.00 competitor to win share. Can you survive the lower margin until you raise prices?" : "⚠️ Penetration pricing means launching clearly <em>below</em> rivals. At "+money(price)+" you're not undercutting the $3.00 competitor.";
+    else if(strat==="competitive") msg = Math.abs(diff)<=0.5 ? "✅ Competitive: you're priced close to the $3.00 competitor. Your product and promotion will need to win customers, since price won't." : "⚠️ Competitive pricing keeps you near rivals' prices. You're "+money(Math.abs(diff))+" "+(diff>0?"above":"below")+" the $3.00 competitor.";
+    else if(strat==="cost") { const sug=vc+1; msg="Cost-based: adding a desired per-unit profit of $1.00 to your variable cost of "+money(vc)+" gives <strong>"+money(sug)+"</strong>. "+(Math.abs(price-sug)<=0.5?"✅ Your price matches.":"⚠️ Your price is "+(price>sug?"above":"below")+" that. Remember: cost-based pricing ignores what customers will pay — check your projected sales!"); }
+    else msg = (price>COMP+0.25) ? (s.e<=1.1 ? "✅ Value-based: you charge a premium, and "+s.n+" are not very price sensitive. Your branding must deliver the value they're paying for." : "⚠️ Value-based premium pricing with "+s.n+" is risky — they're price sensitive. Do they see enough extra value?") : "⚠️ Value-based pricing usually means charging for perceived value — often a premium. You're at or below the competitor.";
+    $("#stratCheck").innerHTML=msg;
+    // preview
+    const name=$("#barName").value.trim()||"Your Bar";
+    $("#pvName").textContent=name; $("#pvFlavor").textContent=$("#flavor").value; $("#pvPrice").textContent=money(price);
+    const wrap=$('input[name="wrap"]:checked').value; $("#pvWrap").setAttribute("fill",wrap);
+    $("#barPreview").setAttribute("aria-label","Preview of your chocolate bar named "+name+", "+$("#flavor").value+" flavor, priced at "+money(price));
+    // save
+    ids.forEach(i=>store["lab_"+i]=el[i].value); store.lab_wrap=wrap; store.lab_strategy=strat;
+    results.lab = name+" ("+$("#flavor").value+") for "+s.n+" · "+S[strat]+" pricing at "+money(price)+" · variable cost "+money(vc)+" · projected "+units+" bars/month · break-even "+(isFinite(be)?be+" bars":"never")+" · projected "+(profit>=0?"profit ":"loss ")+money0(Math.abs(profit))+(shocked?" (after Cocoa Shock)":"");
+    save();
+  }
+  $$("#lab input, #lab select").forEach(x=>x.addEventListener("input", calc));
+  $$("#lab input[type=radio]").forEach(x=>x.addEventListener("change", calc));
+  $("#shockBtn").addEventListener("click", ()=>{
+    if(shocked){ $("#shockFeedback").textContent="The shock already hit! Adjust your price, segment, or costs to recover — or undo it."; return; }
+    shocked=true; baseCocoa=v("vCocoa"); const nv=Math.min(2.5, baseCocoa*2); el.vCocoa.value=nv; calc();
+    $("#shockFeedback").textContent="Cocoa jumped from "+money(baseCocoa)+" to "+money(nv)+" per bar. Options: raise your price (how price sensitive is your segment?), shrink the bar or use less cocoa (lower the cocoa slider — shrinkflation), cut other costs, or accept a smaller margin for now. Choose one and explain it in your justification.";
+  });
+  $("#shockUndo").addEventListener("click", ()=>{ if(!shocked) return; shocked=false; el.vCocoa.value=baseCocoa; calc(); $("#shockFeedback").textContent="Shock undone — cocoa is back to "+money(baseCocoa)+" per bar."; });
+  calc();
+
+  /* ---------- LEGAL LINE ---------- */
+  const rulings=["Price fixing","Predatory pricing","Price gouging","Legal pricing decision","Price discrimination"];
+  const legal=[
+    {t:"Executives from two giant chocolate companies secretly meet and agree to raise their prices by the same amount next month.", a:0, e:"Price fixing: competitors colluding to set prices is illegal, even if each price looks normal on its own."},
+    {t:"A national chain sells chocolate bars below its own cost in one town until the local chocolatier goes out of business — then plans to raise prices.", a:1, e:"Predatory pricing: pricing below cost to drive a competitor out of the market, then raising prices, is illegal."},
+    {t:"A chocolatier raises the price of Valentine's gift boxes by 15% for the season because demand is high.", a:3, e:"Legal: businesses may raise prices when demand rises. Chocolate isn't an essential good, and no one colluded."},
+    {t:"Right after a hurricane, a convenience store raises the price of bottled water from $1.50 to $15.", a:2, e:"Price gouging: raising prices because demand jumped during a crisis is illegal in many states."},
+    {t:"A chocolate shop charges customers a higher price for the same truffles based on their nationality.", a:4, e:"Price discrimination: charging different prices for the same product based on nationality, race, sex or another protected status is illegal."}
+  ];
+  const ruleOrder=[1,4,3,0,2];
+  $("#legalItems").innerHTML = legal.map((c,i)=>
+    '<fieldset class="legal-item"><legend>Case '+(i+1)+': '+c.t+'</legend><div class="opts">'+
+    ruleOrder.map(r=>'<label><input type="radio" name="lg'+i+'" value="'+r+'"> '+rulings[r]+'</label>').join("")+
+    '</div><div class="feedback" id="lgf'+i+'" aria-live="polite"></div></fieldset>').join("");
+  $("#checkLegal").addEventListener("click", ()=>{
+    let right=0, miss=0;
+    legal.forEach((c,i)=>{
+      const sel=$('input[name="lg'+i+'"]:checked'), f=$("#lgf"+i);
+      if(!sel){ miss++; f.className="feedback bad"; f.textContent="Choose a ruling."; return; }
+      const ok=+sel.value===c.a; if(ok) right++;
+      f.className="feedback "+(ok?"good":"bad"); f.textContent=(ok?"✅ ":"❌ ")+c.e;
+    });
+    const f=$("#legalFeedback"); f.className="feedback info";
+    f.textContent = miss ? "Rule on every case first." : "You ruled correctly on "+right+" of "+legal.length+" cases.";
+    if(!miss){ results.legal=right+" / "+legal.length; save(); }
+  });
+
+  /* ---------- EXIT TICKET ---------- */
+  // Answer key: 1-C, 2-A, 3-D, 4-B, 5-B
+  const qs=[
+    {q:"A new chocolate brand launches at $1.50 per bar, well below rivals' $2.50, to win customers quickly before raising its price later. Which pricing strategy is this?",
+     o:["Value-based pricing","Cost-based pricing","Penetration pricing","Competitive pricing"], a:2,
+     e:"A low launch price designed to pull customers from established rivals and gain market share is penetration pricing."},
+    {q:"Cocoa costs triple after poor harvests. Surveys show most of a brand's customers would switch to other snacks if chocolate prices rose. Which statement best describes the brand's pricing power?",
+     o:["It is limited, because demand is elastic and customers have substitutes","It is strong, because rising costs always justify higher prices","It is unaffected, because cost changes do not influence pricing","It is strong, because supply shortages make customers more loyal"], a:0,
+     e:"When customers are price sensitive and have substitutes, demand is elastic — the business can't easily pass rising costs on, so pricing power is limited."},
+    {q:"Which of the following is an example of illegal price fixing?",
+     o:["A store lowers chocolate prices for a holiday sale","A chocolatier raises prices after its cocoa costs increase","A new brand prices its bars slightly below a well-known competitor","Two rival chocolate makers secretly agree to raise prices by the same amount"], a:3,
+     e:"Price fixing is when competitors collude to set prices. The other choices are normal, independent pricing decisions."},
+    {q:"A chocolatier's per-unit cost for a custom bar is $2.00. Using cost-based pricing, it wants to earn a per-unit profit of $1.00 on each bar. What price should it charge?",
+     o:["$2.50","$3.00","$4.00","$1.00"], a:1,
+     e:"Cost-based price = per-unit cost + desired per-unit profit = $2.00 + $1.00 = $3.00."},
+    {q:"A luxury brand charges $40 for a box of 12 truffles because customers associate the brand with special occasions and status, even though ingredients cost far less. Which strategy is the brand using?",
+     o:["Competitive pricing","Value-based pricing","Penetration pricing","Cost-based pricing"], a:1,
+     e:"Setting price by customers' perceived value — brand, status, experience — is value-based pricing."}
+  ];
+  const L="ABCD", form=$("#exitForm");
+  form.innerHTML = qs.map((q,i)=>'<fieldset class="q-block"><legend>'+(i+1)+'. '+q.q+'</legend>'+
+    q.o.map((o,j)=>'<label class="q-opt"><input type="radio" name="q'+i+'" value="'+j+'"><span><strong>'+L[j]+'.</strong> '+o+'</span></label>').join("")+
+    '<div class="feedback" id="qf'+i+'" aria-live="polite"></div></fieldset>').join("");
+  $("#checkExit").addEventListener("click", ()=>{
+    let score=0, miss=0;
+    qs.forEach((q,i)=>{
+      const sel=form.querySelector('input[name="q'+i+'"]:checked'), f=$("#qf"+i);
+      $$('input[name="q'+i+'"]',form).forEach(inp=>inp.parentElement.classList.remove("correct","wrong"));
+      if(!sel){ miss++; f.className="feedback bad"; f.textContent="Choose an answer."; return; }
+      const ok=+sel.value===q.a; if(ok) score++;
+      sel.parentElement.classList.add(ok?"correct":"wrong");
+      $$('input[name="q'+i+'"]',form)[q.a].parentElement.classList.add("correct");
+      f.className="feedback "+(ok?"good":"bad");
+      f.textContent=(ok?"✅ Correct. ":"❌ The answer is "+L[q.a]+". ")+q.e;
+    });
+    $("#exitScore").textContent=score+" / "+qs.length+(score===qs.length?" 🍫 Perfect!":"");
+    if(!miss){ results.exit=score+" / "+qs.length; results.exitAnswers=qs.map((q,i)=>(i+1)+"-"+L[+form.querySelector('input[name="q'+i+'"]:checked').value]).join(", "); save(); }
+  });
+  $("#resetExit").addEventListener("click", ()=>{ form.reset(); $$(".q-opt",form).forEach(l=>l.classList.remove("correct","wrong")); qs.forEach((q,i)=>{ const f=$("#qf"+i); f.textContent=""; f.className="feedback"; }); $("#exitScore").textContent=""; });
+
+  /* ---------- JUST-IN-TIME EXPLAINER VIDEOS ---------- */
+  const POD = (x,y,s,mouth) => `<g transform="translate(${x} ${y}) scale(${s})"><path d="M70 0 C120 10 140 80 120 140 C105 185 35 185 20 140 C0 80 20 10 70 0Z" fill="#C8915F" stroke="#5A3420" stroke-width="6"/><path d="M70 6 C62 60 62 120 70 176" stroke="#9C6A40" stroke-width="4" fill="none"/><ellipse cx="52" cy="78" rx="11" ry="13" fill="#fff"/><ellipse cx="90" cy="78" rx="11" ry="13" fill="#fff"/><circle cx="54" cy="81" r="6" fill="#0F1B33"/><circle cx="92" cy="81" r="6" fill="#0F1B33"/>${mouth==="o"?'<ellipse cx="71" cy="112" rx="9" ry="11" fill="#0F1B33"/>':mouth==="flat"?'<path d="M56 112 H86" stroke="#0F1B33" stroke-width="5" stroke-linecap="round"/>':'<path d="M52 106 Q71 128 90 106" stroke="#0F1B33" stroke-width="5" fill="#B3261E" stroke-linecap="round"/>'}<path d="M84 -18 C96 -34 116 -30 118 -26 C108 -14 96 -12 84 -18Z" fill="#2E9B5A"/><path d="M70 0 C72 -12 80 -20 92 -22" stroke="#1E7A46" stroke-width="5" fill="none"/></g>`;
+  const TAG = (x,y,txt,fill,d) => `<g transform="translate(${x} ${y})"><g class="pop" style="animation-delay:${d||0}s"><path d="M0 12 l12 -12 h${txt.length*8+16} v24 h-${txt.length*8+16}z" fill="${fill||"#fff"}" stroke="#0F1B33" stroke-width="2"/><circle cx="10" cy="12" r="3" fill="#0F1B33"/><text x="${(txt.length*8+16)/2+14}" y="17" text-anchor="middle" font-family="monospace" font-weight="700" font-size="13" fill="#0F1B33">${txt}</text></g></g>`;
+  const WRAP = (x,y,w,h,fill,label,d) => `<g class="pop" style="animation-delay:${d||0}s"><rect x="${x}" y="${y}" width="${w}" height="${h}" rx="8" fill="${fill}" stroke="#2E1A0F" stroke-width="3"/><text x="${x+w/2}" y="${y+h/2+5}" text-anchor="middle" font-family="Arial" font-weight="800" font-size="${Math.min(14,w/label.length*1.6)}" fill="#fff">${label}</text></g>`;
+  const SVG = inner => `<svg viewBox="0 0 320 200" aria-hidden="true" focusable="false">${inner}</svg>`;
+  const BARS = (vals,color,d) => vals.map((v,i)=>`<rect class="grow" style="animation-delay:${(d||0)+i*0.25}s" x="${170+i*34}" y="${170-v}" width="24" height="${v}" fill="${color}" rx="3"/>`).join("")+'<line x1="160" y1="170" x2="300" y2="170" stroke="#0F1B33" stroke-width="2"/>';
+
+  const VIDEOS = {
+    strategies:{title:"Four Pricing Strategies", scenes:[
+      {h:"4 ways to set a price", art:SVG(POD(110,20,.85)+TAG(10,30,"VALUE","#F5D27A",.3)+TAG(220,30,"COMPETE","#BFD7F2",.6)+TAG(10,140,"COST","#BFE6CC",.9)+TAG(220,140,"LOW START","#E3CFEF",1.2)),
+       c:"Hi, I'm Coco! Every business has to answer one big question: how much should we charge? Here are the four pricing strategies from the AP course."},
+      {h:"Value-based pricing", art:SVG(`<g class="pop"><rect x="70" y="80" width="130" height="90" rx="8" fill="#0F1B33" stroke="#E8B84A" stroke-width="5"/><path d="M135 80 v90 M70 125 h130" stroke="#E8B84A" stroke-width="7"/><path d="M135 80 q-26 -26 -38 -4 q14 10 38 4 q26 -26 38 -4 q-14 10 -38 4z" fill="#E8B84A"/></g>`+TAG(210,40,"$40","#fff",.5)+`<g class="pop" style="animation-delay:.9s"><path d="M250 120 c-12 -14 -28 -2 -18 10 l18 16 18 -16 c10 -12 -6 -24 -18 -10z" fill="#B3261E"/></g>`),
+       c:"Value-based pricing sets the price by what the product is worth to the customer. Products that are highly differentiated or unique, like a luxury truffle gift box, use it most."},
+      {h:"Competitive pricing", art:SVG(WRAP(30,70,110,60,"#C0392B","RIVAL $1.29",.1)+`<text class="pop" style="animation-delay:.5s" x="160" y="108" text-anchor="middle" font-size="34" font-weight="800" fill="#0F1B33">≈</text>`+WRAP(180,70,110,60,"#174A85","YOURS $1.19",.8)),
+       c:"Competitive pricing sets the price based on what rivals charge, which is often called price matching. A product that stands out may charge a premium. One that doesn't may price at or below rivals to gain market share."},
+      {h:"Cost-based pricing", art:SVG(`<g class="pop"><rect x="20" y="110" width="150" height="50" fill="#5A3420" rx="4"/><text x="95" y="140" text-anchor="middle" fill="#fff" font-weight="700" font-size="13">Per-unit cost $1.60</text></g><g class="pop" style="animation-delay:.6s"><rect x="20" y="70" width="150" height="38" fill="#1E6A3E" rx="4"/><text x="95" y="94" text-anchor="middle" fill="#fff" font-weight="700" font-size="13">+ Profit $0.80</text></g><text class="pop" style="animation-delay:1.1s" x="178" y="128" font-size="30" font-weight="800" fill="#0F1B33">=</text>`+TAG(200,104,"$2.40","#F5D27A",1.4)),
+       c:"Cost-based pricing starts with the per-unit cost and adds the profit the business wants to earn on each unit. It's common when costs are clear and easy to explain, like custom orders or construction contractors."},
+      {h:"Penetration pricing", art:SVG(`<g class="rocket"><path d="M80 60 q24 18 18 60 h-36 q-6 -42 18 -60z" fill="#6A2C82" stroke="#2E1A0F" stroke-width="3"/><circle cx="80" cy="88" r="9" fill="#fff"/><path d="M62 120 l-12 16 14 -4z M98 120 l12 16 -14 -4z" fill="#E8B84A"/><path d="M70 122 q10 22 20 0" fill="#F28C28"/></g>`+TAG(130,140,"$0.99 now","#fff",.4)+`<path class="pop" style="animation-delay:1s" d="M180 130 Q220 90 230 60" stroke="#1E6A3E" stroke-width="4" fill="none" marker-end="url(#ar)"/><defs><marker id="ar" markerWidth="8" markerHeight="8" refX="4" refY="4" orient="auto"><path d="M0 0 L8 4 L0 8z" fill="#1E6A3E"/></marker></defs>`+TAG(200,22,"$2.50 later","#BFE6CC",1.4)),
+       c:"Penetration pricing launches at a low price, possibly even below per-unit cost. The goal is to pull price-sensitive customers away from competitors and grow market share fast, then raise the price later."},
+      {h:"The golden rule", art:SVG(POD(30,20,.85,"o")+`<g class="pop" style="animation-delay:.4s"><rect x="160" y="60" width="140" height="80" rx="12" fill="#FBE7E5" stroke="#B3261E" stroke-width="3"/><text x="230" y="95" text-anchor="middle" font-weight="800" font-size="15" fill="#8A1C16">Price ≤ cost</text><text x="230" y="120" text-anchor="middle" font-weight="800" font-size="15" fill="#8A1C16">= no profit</text></g>`),
+       c:"One rule applies to every strategy. If the price is equal to or lower than the per-unit cost, the product is not profitable."}
+    ]},
+    power:{title:"Pricing Power and Elasticity", scenes:[
+      {h:"What is pricing power?", art:SVG(`<path d="M60 170 A100 100 0 0 1 260 170" fill="none" stroke="#E5DCCB" stroke-width="24"/><path d="M60 170 A100 100 0 0 1 110 83" fill="none" stroke="#B3261E" stroke-width="24"/><path d="M210 83 A100 100 0 0 1 260 170" fill="none" stroke="#1E7A46" stroke-width="24"/><g class="swing" style="transform-origin:160px 170px"><line x1="160" y1="170" x2="160" y2="88" stroke="#0F1B33" stroke-width="6" stroke-linecap="round"/></g><circle cx="160" cy="170" r="11" fill="#E8B84A" stroke="#0F1B33" stroke-width="3"/>`),
+       c:"Pricing power is a business's ability to raise prices without risking market share. Some businesses have a lot of it. Others have almost none."},
+      {h:"Elastic demand = little power", art:SVG(TAG(20,20,"$2.00 → $2.50","#fff")+BARS([120,70,30],"#B3261E",.4)+`<g class="pop" style="animation-delay:1.2s"><circle cx="60" cy="120" r="16" fill="#F28C28"/><circle cx="90" cy="130" r="16" fill="#E84A8A"/><circle cx="72" cy="150" r="16" fill="#2E9B5A"/><text x="75" y="186" text-anchor="middle" font-size="12" font-weight="700" fill="#0F1B33">substitutes!</text></g>`),
+       c:"When customers react strongly to price changes, demand is elastic. Raise the price a little and sales drop a lot as customers switch to substitutes. That means little pricing power."},
+      {h:"Inelastic demand = more power", art:SVG(TAG(20,20,"$2.00 → $2.50","#fff")+BARS([120,112,104],"#1E7A46",.4)+`<g class="pop" style="animation-delay:1.2s"><rect x="30" y="110" width="110" height="50" rx="8" fill="#174A85"/><text x="85" y="132" text-anchor="middle" fill="#fff" font-size="11" font-weight="700">ONLY allergen-</text><text x="85" y="148" text-anchor="middle" fill="#fff" font-size="11" font-weight="700">free bar in town</text></g>`),
+       c:"When customers react less to price changes, demand is inelastic. They keep buying even after a price increase, often because there are few substitutes. That means more pricing power."},
+      {h:"Competition matters", art:SVG(WRAP(20,40,50,34,"#8A8F9C","BAR",.1)+WRAP(76,40,50,34,"#8A8F9C","BAR",.2)+WRAP(20,80,50,34,"#8A8F9C","BAR",.3)+WRAP(76,80,50,34,"#8A8F9C","BAR",.4)+WRAP(48,120,50,34,"#8A8F9C","BAR",.5)+`<g class="pop" style="animation-delay:1s"><path d="M230 50 l14 30 33 4 -24 22 6 33 -29 -16 -29 16 6 -33 -24 -22 33 -4z" fill="#E8B84A" stroke="#0F1B33" stroke-width="3"/></g><text x="72" y="185" text-anchor="middle" font-size="12" font-weight="700" fill="#8A1C16">little power</text><text x="230" y="185" text-anchor="middle" font-size="12" font-weight="700" fill="#145232">more power</text>`),
+       c:"Businesses in highly competitive markets with little product differentiation have little pricing power. Less competition, or a highly differentiated product, gives a business more pricing power."},
+      {h:"Market conditions shift power", art:SVG(TAG(10,30,"Cocoa shortage","#F5D27A",.1)+TAG(10,85,"Inflation","#FBE7E5",.5)+TAG(10,140,"Recession","#BFD7F2",.9)+POD(210,30,.7,"o")),
+       c:"Market conditions shift pricing power too. A cocoa shortage or inflation raises costs, and a recession makes shoppers more price sensitive. Rising costs don't guarantee that a business can raise its prices."},
+      {h:"AP exam tip", art:SVG(POD(20,20,.8)+`<g class="pop" style="animation-delay:.4s"><rect x="140" y="50" width="160" height="100" rx="12" fill="#fff" stroke="#0F1B33" stroke-width="3"/><text x="220" y="85" text-anchor="middle" font-size="14" font-weight="800" fill="#8A1C16">No calculating</text><text x="220" y="108" text-anchor="middle" font-size="14" font-weight="800" fill="#145232">Yes explaining</text><text x="220" y="131" text-anchor="middle" font-size="12" fill="#0F1B33">how &amp; why</text></g>`),
+       c:"AP exam tip: you won't calculate price elasticity of demand. You will explain how customers' response to price changes and competition affect a business's pricing power."}
+    ]},
+    breakeven:{title:"Contribution Margin and Break-Even", scenes:[
+      {h:"Two kinds of costs", art:SVG(`<g class="pop"><rect x="20" y="60" width="130" height="100" rx="10" fill="#174A85"/><text x="85" y="95" text-anchor="middle" fill="#fff" font-weight="800" font-size="15">FIXED</text><text x="85" y="118" text-anchor="middle" fill="#fff" font-size="12">kitchen rent,</text><text x="85" y="134" text-anchor="middle" fill="#fff" font-size="12">equipment</text></g><g class="pop" style="animation-delay:.6s"><rect x="170" y="60" width="130" height="100" rx="10" fill="#5A3420"/><text x="235" y="95" text-anchor="middle" fill="#fff" font-weight="800" font-size="15">VARIABLE</text><text x="235" y="118" text-anchor="middle" fill="#fff" font-size="12">cocoa, wrapper</text><text x="235" y="134" text-anchor="middle" fill="#fff" font-size="12">per bar</text></g>`),
+       c:"Will your bar make money? Start with two kinds of costs. Fixed costs, like kitchen rent, stay the same each month. Variable costs, like cocoa and wrappers, are paid for every bar you make."},
+      {h:"Contribution margin", art:SVG(`<g class="pop"><rect x="30" y="70" width="260" height="60" rx="8" fill="#E5DCCB" stroke="#0F1B33" stroke-width="2"/></g><g class="grow-x" style="transform-origin:30px 0"><rect x="30" y="70" width="89" height="60" rx="8" fill="#5A3420"/><text x="74" y="106" text-anchor="middle" fill="#fff" font-weight="800" font-size="14">$1.20</text></g><g class="pop" style="animation-delay:.8s"><rect x="121" y="70" width="169" height="60" rx="8" fill="#1E6A3E"/><text x="205" y="106" text-anchor="middle" fill="#fff" font-weight="800" font-size="14">$2.30 margin</text></g><text x="160" y="55" text-anchor="middle" font-weight="800" font-size="15" fill="#0F1B33">Price $3.50</text><text x="74" y="152" text-anchor="middle" font-size="11" fill="#0F1B33">variable cost</text>`),
+       c:"Each bar sells for $3.50 and costs $1.20 in variable costs. The $2.30 left over is the contribution margin, which is what each sale contributes toward fixed costs and profit."},
+      {h:"Break-even point", art:SVG(`<g class="pop"><rect x="20" y="60" width="280" height="80" rx="12" fill="#0F1B33"/><text x="160" y="95" text-anchor="middle" fill="#F5D27A" font-family="monospace" font-size="14" font-weight="700">$1,200 ÷ $2.30 = 521.7</text></g>`+TAG(110,150,"522 bars","#F5D27A",.8)),
+       c:"Break-even point equals fixed costs divided by contribution margin. $1,200 divided by $2.30 is about 521.7, so round up: you must sell 522 bars to break even."},
+      {h:"Loss zone vs. profit zone", art:SVG(`<rect x="30" y="40" width="130" height="120" fill="#FBE7E5"/><rect x="160" y="40" width="130" height="120" fill="#E3F4EA"/><line x1="160" y1="30" x2="160" y2="170" stroke="#0F1B33" stroke-width="3" stroke-dasharray="6 4"/><path class="draw" d="M30 150 L290 50" stroke="#0F1B33" stroke-width="4" fill="none"/><text x="95" y="60" text-anchor="middle" font-weight="800" font-size="13" fill="#8A1C16">LOSS</text><text x="225" y="150" text-anchor="middle" font-weight="800" font-size="13" fill="#145232">PROFIT</text><text x="160" y="188" text-anchor="middle" font-size="12" font-weight="700" fill="#0F1B33">522 bars</text>`),
+       c:"Sell fewer than 522 bars and you lose money. Every bar after 522 adds $2.30 to profit."},
+      {h:"When costs rise…", art:SVG(TAG(10,30,"Cocoa x2","#F5D27A")+`<g class="pop" style="animation-delay:.6s"><text x="160" y="100" text-anchor="middle" font-family="monospace" font-weight="700" font-size="14" fill="#0F1B33">margin $2.30 → $1.70</text><text x="160" y="130" text-anchor="middle" font-family="monospace" font-weight="700" font-size="14" fill="#8A1C16">break-even 522 → 706</text></g>`+POD(240,120,.4,"o")),
+       c:"If cocoa costs double and variable cost rises to $1.80, the contribution margin shrinks to $1.70, and break-even climbs to 706 bars. Higher costs mean you must sell more just to break even."}
+    ]},
+    legal:{title:"Legal Limits on Pricing", scenes:[
+      {h:"Freedom, with limits", art:SVG(POD(110,20,.85)+`<g transform="translate(220 40) rotate(-25)"><g class="pop" style="animation-delay:.4s"><rect width="50" height="22" rx="4" fill="#7B4A2D" stroke="#2E1A0F" stroke-width="2"/><rect x="21" y="22" width="8" height="50" fill="#7B4A2D" stroke="#2E1A0F" stroke-width="2"/></g></g>`),
+       c:"Businesses have a lot of freedom to set prices, but the law draws some lines. Here are the big ones."},
+      {h:"Price fixing", art:SVG(`<g class="pop"><rect x="20" y="110" width="280" height="14" fill="#5A3420"/><rect x="40" y="124" width="10" height="50" fill="#5A3420"/><rect x="270" y="124" width="10" height="50" fill="#5A3420"/></g><g class="pop" style="animation-delay:.5s"><path d="M110 150 q50 -24 100 0" stroke="#0F1B33" stroke-width="12" fill="none" stroke-linecap="round"/><circle cx="160" cy="140" r="12" fill="#C8915F" stroke="#0F1B33" stroke-width="3"/></g>`+TAG(100,40,"Let's both charge $4","#fff",1)),
+       c:"Price fixing: competitors colluding to agree on a price, usually one set higher than the competitive market price, is illegal in the U.S. and many other countries."},
+      {h:"Price gouging", art:SVG(`<g class="pop"><path d="M60 70 q-30 0 -30 -24 q0 -24 30 -20 q10 -24 40 -14 q30 -10 36 20 q24 4 20 24 q-4 18 -30 14z" fill="#8A8F9C"/><path d="M70 80 l-10 26 14 0 -8 24" stroke="#E8B84A" stroke-width="5" fill="none"/></g><g class="pop" style="animation-delay:.6s"><rect x="190" y="80" width="40" height="80" rx="10" fill="#BFD7F2" stroke="#0F1B33" stroke-width="3"/><rect x="200" y="70" width="20" height="12" fill="#174A85"/></g>`+TAG(160,30,"$1.50 → $15","#FBE7E5",1)),
+       c:"Price gouging: raising a product's price because demand jumped during a crisis, such as a hurricane, is illegal in many U.S. states and many countries."},
+      {h:"Price discrimination", art:SVG(POD(20,50,.55)+POD(200,50,.55)+TAG(10,10,"$3.00","#fff",.3)+TAG(190,10,"$5.00","#FBE7E5",.6)+`<g class="pop" style="animation-delay:1s"><circle cx="160" cy="110" r="26" fill="#fff" stroke="#B3261E" stroke-width="5"/><path d="M142 92 l36 36 M178 92 l-36 36" stroke="#B3261E" stroke-width="5"/></g>`),
+       c:"Price discrimination: charging different customer segments different prices for the same product is illegal when it's based on race, nationality, sex or another protected status."},
+      {h:"Predatory pricing", art:SVG(`<g class="pop"><rect x="20" y="60" width="140" height="100" fill="#174A85"/><text x="90" y="115" text-anchor="middle" fill="#fff" font-weight="800" font-size="14">MEGA CHAIN</text></g><g class="push"><rect x="210" y="100" width="70" height="60" fill="#C8915F" stroke="#5A3420" stroke-width="3"/><path d="M205 100 l40 -26 40 26z" fill="#5A3420"/></g>`+TAG(40,20,"below cost!","#F5D27A",.6)),
+       c:"Predatory pricing: pricing below cost on purpose to drive competitors out of business, then raising prices later, is also restricted by law."},
+      {h:"High ≠ illegal", art:SVG(POD(20,20,.8)+`<g class="pop" style="animation-delay:.4s"><path d="M210 140 c-40 -40 -70 -10 -40 20 l40 30 40 -30 c30 -30 0 -60 -40 -20z" fill="#B3261E" transform="translate(0 -50)"/></g>`+TAG(170,150,"+15% in Feb","#BFE6CC",.8)),
+       c:"Remember: a high price by itself is not illegal. Charging more for Valentine's gift boxes because demand is high is a normal business decision."}
+    ]},
+    verbs:{title:"Reading AP Task Verbs", scenes:[
+      {h:"Read the verb first", art:SVG(POD(20,20,.8)+`<g class="pop" style="animation-delay:.3s"><rect x="140" y="40" width="160" height="120" rx="10" fill="#fff" stroke="#0F1B33" stroke-width="3"/><rect x="155" y="58" width="60" height="16" rx="3" fill="#E8B84A"/><rect x="220" y="62" width="64" height="8" rx="3" fill="#CFC5B3"/><rect x="155" y="86" width="130" height="8" rx="3" fill="#CFC5B3"/><rect x="155" y="104" width="110" height="8" rx="3" fill="#CFC5B3"/><rect x="155" y="122" width="120" height="8" rx="3" fill="#CFC5B3"/></g>`),
+       c:"On AP free-response questions, the task verb tells you exactly what to do and how much to write. Let's decode the six verbs in the course and exam description."},
+      {h:"Identify", art:SVG(`<g class="pop"><rect x="30" y="60" width="260" height="80" rx="12" fill="#0F1B33"/><text x="160" y="96" text-anchor="middle" fill="#F5D27A" font-size="22" font-weight="800">IDENTIFY</text><text x="160" y="122" text-anchor="middle" fill="#fff" font-size="13">short &amp; direct, no explanation</text></g>`),
+       c:"Identify: indicate or provide information about a specified topic, without elaboration or explanation. Keep it short and direct. Example: “Penetration pricing.”"},
+      {h:"Describe", art:SVG(`<g class="pop"><rect x="30" y="60" width="260" height="80" rx="12" fill="#5A3420"/><text x="160" y="96" text-anchor="middle" fill="#F5D27A" font-size="22" font-weight="800">DESCRIBE</text><text x="160" y="122" text-anchor="middle" fill="#fff" font-size="13">give the relevant details</text></g>`),
+       c:"Describe: provide the relevant characteristics of a specific topic or concept. Give details from the scenario. Example: “B&B launched at $2.50, below its rivals, and plans to raise the price later.”"},
+      {h:"Explain", art:SVG(`<g class="pop"><rect x="8" y="70" width="84" height="60" rx="8" fill="#174A85"/><text x="50" y="105" text-anchor="middle" fill="#fff" font-weight="800" font-size="12">EVIDENCE</text></g><text class="pop" style="animation-delay:.5s" x="135" y="108" text-anchor="middle" font-size="12" font-weight="800" fill="#0F1B33">because →</text><g class="pop" style="animation-delay:1s"><rect x="180" y="70" width="128" height="60" rx="8" fill="#1E6A3E"/><text x="244" y="105" text-anchor="middle" fill="#fff" font-weight="800" font-size="12">HOW / WHY</text></g>`),
+       c:"Explain: show how or why something occurs, using evidence or reasoning. Build a “because” or “which leads to” chain that connects the evidence to the outcome."},
+      {h:"Compare & Recommend", art:SVG(WRAP(20,60,110,60,"#174A85","OPTION 1",.1)+WRAP(190,60,110,60,"#6A2C82","OPTION 2",.3)+`<g class="pop" style="animation-delay:.9s"><path d="M175 150 l16 16 30 -36" stroke="#1E7A46" stroke-width="8" fill="none" stroke-linecap="round"/></g>`),
+       c:"Compare: describe similarities or differences, with evidence for both sides. Recommend: articulate a course of action and support it with evidence. Pick one option and defend it."},
+      {h:"Pitch (FRQ 1)", art:SVG(POD(20,30,.75)+`<g class="pop" style="animation-delay:.4s"><path d="M150 60 l120 -30 v130 l-120 -30z" fill="#E8B84A" stroke="#0F1B33" stroke-width="3"/><rect x="128" y="62" width="24" height="66" rx="4" fill="#0F1B33"/></g>`),
+       c:"Pitch: describe the product, the target customer, and the problem, need or want it addresses, and explain how it creates value for customers. You'll do this for your Business Canvas Project on Free-Response Question 1."},
+      {h:"Pro tips", art:SVG(TAG(10,25,"1 part = 1 answer","#BFD7F2",.1)+TAG(10,85,"Use the numbers","#F5D27A",.5)+TAG(10,145,"Don't just restate","#BFE6CC",.9)+POD(230,40,.6)),
+       c:"Pro tips: answer each part separately, use specific numbers from the scenario, and don't just restate the prompt. One clear, well-supported answer beats a list of guesses."}
+    ]}
+  };
+
+  function initPlayer(host){
+    const v=VIDEOS[host.dataset.vid]; if(!v||host.dataset.ready) return; host.dataset.ready="1";
+    const N=v.scenes.length, uid="v"+host.dataset.vid;
+    host.innerHTML =
+      '<div class="stage" role="group" aria-roledescription="video" aria-label="'+v.title+' explainer"><div class="scene"></div><div class="vbar" aria-hidden="true"><div></div></div></div>'+
+      '<p class="cap" id="'+uid+'cap" aria-live="polite"></p>'+
+      '<div class="vctl"><button type="button" class="btn gold vplay">▶ Play</button>'+
+      '<button type="button" class="btn ghost vprev" aria-label="Previous scene">◀</button>'+
+      '<button type="button" class="btn ghost vnext" aria-label="Next scene">▶</button>'+
+      '<button type="button" class="btn ghost vrestart">Restart</button>'+
+      '<span class="vcount"></span></div>'+
+      '<details class="vtrans"><summary>Read the transcript</summary><ol>'+v.scenes.map(s=>'<li><strong>'+s.h+'.</strong> '+s.c+'</li>').join("")+'</ol></details>';
+    const scene=host.querySelector(".scene"), cap=host.querySelector(".cap"), bar=host.querySelector(".vbar div"), play=host.querySelector(".vplay"), count=host.querySelector(".vcount");
+    let i=0, playing=false, t=null;
+    const dur=s=>Math.max(6000, s.c.length*62);
+    function render(){
+      const s=v.scenes[i];
+      scene.innerHTML='<div class="scn"><div class="art">'+s.art+'</div><div class="txt"><p class="vh">'+s.h+'</p><p class="vsub">'+s.c+'</p></div></div>';
+      cap.textContent=s.c;
+      count.textContent="Scene "+(i+1)+" of "+N;
+      bar.style.transition="none"; bar.style.width=(i/N*100)+"%";
+      if(playing){ void bar.offsetWidth; bar.style.transition="width "+dur(s)+"ms linear"; bar.style.width=((i+1)/N*100)+"%"; }
+    }
+    function stop(){ playing=false; clearTimeout(t); play.textContent = i>=N-1 ? "↺ Replay" : "▶ Play"; host.classList.remove("playing"); render(); }
+    function tick(){ clearTimeout(t); t=setTimeout(()=>{ if(i<N-1){ i++; render(); tick(); } else { bar.style.width="100%"; stop(); } }, dur(v.scenes[i])); }
+    function start(){ if(i>=N-1 && !playing && play.textContent.indexOf("Replay")>-1) i=0; playing=true; play.textContent="❚❚ Pause"; host.classList.add("playing"); render(); tick(); }
+    play.addEventListener("click", ()=> playing ? stop() : start());
+    host.querySelector(".vprev").addEventListener("click", ()=>{ i=Math.max(0,i-1); render(); if(playing) tick(); });
+    host.querySelector(".vnext").addEventListener("click", ()=>{ i=Math.min(N-1,i+1); render(); if(playing) tick(); });
+    host.querySelector(".vrestart").addEventListener("click", ()=>{ i=0; render(); if(playing) tick(); });
+    host.closest("details").addEventListener("toggle", e=>{ if(!e.target.open && playing) stop(); });
+    render();
+  }
+  $$(".vid-wrap").forEach(d=>d.addEventListener("toggle", ()=>{ if(d.open){ const p=d.querySelector(".player"); initPlayer(p); results["vid_"+p.dataset.vid]=true; save(); } }));
+
+  /* ---------- AP EXAM PRACTICE ---------- */
+  // MCQ answer key: 1-B, 2-D, 3-A, 4-C
+  const apQs=[
+    {q:"Which of the following pricing strategies is B&B most likely to use when it enters the market, given its launch price and goal?",
+     o:["Cost-based pricing","Penetration pricing","Price discrimination","Value-based pricing"], a:1,
+     e:"B&B sets a low launch price to pull customers from established brands and plans to raise the price after reaching its market share goal. That is penetration pricing."},
+    {q:"Which of the following conclusions is supported by the data in Figure 1?",
+     o:["Choco Royale's per-unit cost is higher than B&B's per-unit cost.","Value Bar earns a higher per-unit profit than SweetCo.","At its launch price, B&B will earn the highest per-unit profit of the four brands.","At its launch price, B&B will earn a per-unit profit of $0.40."], a:3,
+     e:"Per-unit profit = price − per-unit cost = $2.50 − $2.10 = $0.40. Choco Royale's cost ($1.85) is lower than B&B's, Value Bar earns $0.54 vs. SweetCo's $1.39, and B&B's $0.40 is the lowest of the four."},
+    {q:"Based on the survey results, which of the following best explains B&B's pricing power?",
+     o:["B&B has limited pricing power because customers in its market are highly responsive to price changes.","B&B has strong pricing power because ethically sourced cocoa guarantees customers will pay more.","B&B has strong pricing power because rivals charge more than B&B's launch price.","B&B's pricing power is not affected by customer responsiveness because it is a startup."], a:0,
+     e:"70% of shoppers would switch brands over a $0.50 increase, so demand is elastic. A business whose customers are highly responsive to price changes has little pricing power."},
+    {q:"Suppose a B&B store manager began charging some customers a higher price for the same bar based on their nationality. Which of the following would this practice violate?",
+     o:["Laws against price gouging","Laws against price fixing","Laws against price discrimination based on a protected status","Laws against penetration pricing"], a:2,
+     e:"Charging different prices for the same product based on race, nationality, sex or another protected status is illegal price discrimination."}
+  ];
+  const apForm=$("#apForm");
+  apForm.innerHTML = apQs.map((q,i)=>'<fieldset class="q-block"><legend>'+(i+1)+'. '+q.q+'</legend>'+
+    q.o.map((o,j)=>'<label class="q-opt"><input type="radio" name="ap'+i+'" value="'+j+'"><span><strong>('+L[j]+')</strong> '+o+'</span></label>').join("")+
+    '<div class="feedback" id="apf'+i+'" aria-live="polite"></div></fieldset>').join("");
+  $("#checkAp").addEventListener("click", ()=>{
+    let score=0, miss=0;
+    apQs.forEach((q,i)=>{
+      const sel=apForm.querySelector('input[name="ap'+i+'"]:checked'), f=$("#apf"+i);
+      $$('input[name="ap'+i+'"]',apForm).forEach(inp=>inp.parentElement.classList.remove("correct","wrong"));
+      if(!sel){ miss++; f.className="feedback bad"; f.textContent="Choose an answer."; return; }
+      const ok=+sel.value===q.a; if(ok) score++;
+      sel.parentElement.classList.add(ok?"correct":"wrong");
+      $$('input[name="ap'+i+'"]',apForm)[q.a].parentElement.classList.add("correct");
+      f.className="feedback "+(ok?"good":"bad");
+      f.textContent=(ok?"✅ Correct. ":"❌ The answer is ("+L[q.a]+"). ")+q.e;
+    });
+    $("#apMcqScore").textContent=score+" / "+apQs.length;
+    if(!miss){ results.apMcq=score+" / "+apQs.length; results.apMcqAnswers=apQs.map((q,i)=>(i+1)+"-"+L[+apForm.querySelector('input[name="ap'+i+'"]:checked').value]).join(", "); save(); }
+  });
+  $("#resetAp").addEventListener("click", ()=>{ apForm.reset(); $$(".q-opt",apForm).forEach(l=>l.classList.remove("correct","wrong")); apQs.forEach((q,i)=>{ const f=$("#apf"+i); f.textContent=""; f.className="feedback"; }); $("#apMcqScore").textContent=""; });
+
+  function frqScore(){
+    const all=$$(".pt"), got=all.filter(c=>c.checked).length;
+    const f3=$$('.pt[id^="pt_f3"]').filter(c=>c.checked).length, f4=$$('.pt[id^="pt_f4"]').filter(c=>c.checked).length;
+    results.frq3=f3+" / 3"; results.frq4=f4+" / 6"; save();
+    $("#frqScore").textContent = "Self-scored free-response points: "+got+" / "+all.length+" (Business Concept Application "+f3+" / 3 · Business Decision "+f4+" / 6)";
+  }
+  $$(".pt").forEach(cb=>{ if(store[cb.id]) cb.checked=true; cb.addEventListener("change", ()=>{ store[cb.id]=cb.checked; save(); frqScore(); }); });
+  frqScore();
+
+  /* ---------- SUMMARY ---------- */
+  const val=id=>($("#"+id).value||"").trim()||"(not answered)";
+  function buildSummary(){
+    const lines=[
+      "SWEET PRICING: THE BUSINESS OF CHOCOLATE",
+      "AP Business with Personal Finance · Project 2, Task 5: Price and Pricing Strategies",
+      "Name: "+val("studentName"),
+      "Date: "+new Date().toLocaleDateString(),
+      "",
+      "1. WARM UP",
+      "Bar chosen: "+(results.bar||"(not chosen)"),
+      "Customer characteristic: "+val("warmReason"),
+      "",
+      "2. PRICING STRATEGY SORT — score: "+(results.sort||"(not checked)"),
+      "",
+      "3. COCOA CRUNCH — score: "+(results.crunch||"(not finished)"),
+      "Shrinkflation response: "+val("shrinkResp"),
+      "",
+      "4. PRICE YOUR BAR LAB",
+      "Plan: "+(results.lab||"(not started)"),
+      "Justification: "+val("labJustify"),
+      "",
+      "5. LEGAL LINE — score: "+(results.legal||"(not checked)"),
+      "",
+      "6. EXIT TICKET — score: "+(results.exit||"(not checked)")+(results.exitAnswers?"  ["+results.exitAnswers+"]":""),
+      "",
+      "7. AP EXAM PRACTICE",
+      "Multiple choice — score: "+(results.apMcq||"(not checked)")+(results.apMcqAnswers?"  ["+results.apMcqAnswers+"]":""),
+      "Business Concept Application (self-scored "+(results.frq3||"0 / 3")+")",
+      "(A) "+val("f3a"), "(B) "+val("f3b"), "(C) "+val("f3c"),
+      "Business Decision (self-scored "+(results.frq4||"0 / 6")+")",
+      "(A) "+val("f4a"), "(B) "+val("f4b"), "(C) "+val("f4c"),
+      "Explainer videos opened: "+(["strategies","power","breakeven","legal","verbs"].filter(k=>results["vid_"+k]).join(", ")||"none"),
+      "",
+      "8. BUSINESS CANVAS PROJECT PRICING HYPOTHESIS",
+      val("bcpHyp")
+    ];
+    $("#summaryBox").value=lines.join("\n");
+  }
+  $("#buildSummary").addEventListener("click", ()=>{ buildSummary(); $("#copyFeedback").textContent="Summary ready. Copy it into your assignment or print it."; });
+  $("#copySummary").addEventListener("click", ()=>{
+    buildSummary(); const box=$("#summaryBox");
+    const done=()=>{$("#copyFeedback").textContent="Copied! Paste it into your class assignment.";};
+    if(navigator.clipboard && navigator.clipboard.writeText){ navigator.clipboard.writeText(box.value).then(done, ()=>{ box.select(); try{document.execCommand("copy"); done();}catch(e){ $("#copyFeedback").textContent="Select the text in the box and copy it manually."; } }); }
+    else { box.select(); try{document.execCommand("copy"); done();}catch(e){ $("#copyFeedback").textContent="Select the text in the box and copy it manually."; } }
+  });
+  $("#printSummary").addEventListener("click", ()=>{
+    buildSummary();
+    const w=window.open("","_blank");
+    if(!w){ $("#copyFeedback").textContent="Pop-up blocked. Use Copy instead, or allow pop-ups for this page."; return; }
+    const esc=s=>s.replace(/[&<>]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;"}[c]));
+    w.document.write('<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><title>My Work: Sweet Pricing</title><style>body{font-family:Georgia,serif;max-width:720px;margin:30px auto;padding:0 16px;line-height:1.5;white-space:pre-wrap}</style></head><body>'+esc($("#summaryBox").value)+'</body></html>');
+    w.document.close(); w.focus(); w.print();
+  });
+  $("#clearAll").addEventListener("click", ()=>{
+    if(!confirm("Clear all saved answers on this device? This can't be undone.")) return;
+    try{ localStorage.removeItem(KEY); }catch(e){}
+    location.reload();
+  });
+})();
+</script>
+</body>
+</html>
